@@ -1,29 +1,60 @@
-import * as React from "react";
-import { ResponsiveBar } from "@nivo/bar";
+import React, { useEffect, useState } from "react";
+import { init, dispose } from "klinecharts";
+import styled from "styled-components";
 
-const Barchart = ({ hoga, color, max, reverse }) => {
+// https://klinecharts.com/guide/style
+
+export default function Chart({ price, dayCandle }) {
+  let options = {
+    candle: {
+      bar: {
+        upColor: "#C84A31",
+        downColor: "#1261C4",
+      },
+      tooltip: {
+        showRule: "follow_cross",
+        showType: "standard",
+      },
+    },
+    indicator: {
+      bars: [
+        {
+          upColor: "#E3A498",
+          downColor: "#88B0E1",
+          style: "fill",
+        },
+      ],
+    },
+  };
+
+  useEffect(() => {
+    console.log("리렌더");
+    const chart = init("simple_chart");
+
+    chart.createIndicator("MA", true, { id: "candle_pane" });
+    // chart.createIndicator("VOL");
+    chart.setStyles(options);
+    chart.applyNewData(dayCandle);
+
+    return () => {
+      dispose("simple_chart");
+    };
+  }, [dayCandle]);
+
   return (
-    <div style={{ width: "100%", height: "90%" }}>
-      <ResponsiveBar
-        data={[{ price: (hoga / max) * 100 }]}
-        layout="horizontal"
-        keys={["price"]}
-        colors={[color]}
-        colorBy="id"
-        isInteractive={false}
-        enableGridY={false}
-        enableLabel={false}
-        axisRight={null}
-        axisLeft={null}
-        axisBottom={null}
-        reverse={reverse}
-        animate={false}
-        minValue={0}
-        maxValue={100}
-        valueScale={{ type: "symlog" }}
+    <Center>
+      <div
+        id="simple_chart"
+        style={{ height: 400, width: "100%", maxWidth: "480px" }}
       />
-    </div>
+    </Center>
   );
-};
+}
 
-export default Barchart;
+const Center = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;

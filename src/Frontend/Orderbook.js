@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Barchart from "./Chart";
+import Barchart from "./BarChart";
 
 const Orderbook = ({
   orderbook,
@@ -121,7 +121,7 @@ const Center = styled.div`
 `;
 
 const OrderbookContainer = styled.div`
-  margin: 20px 0px;
+  margin: 40px 0px;
   padding: 5px;
   width: 100%;
   max-width: 480px;

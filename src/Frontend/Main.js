@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Orderbook from "./Orderbook";
 import Trade from "./Trade";
+import Chart from "./Chart";
+import axios from "axios";
 
 const Main = () => {
   const [price, setPrice] = useState(0); // 가격
@@ -12,14 +14,33 @@ const Main = () => {
   //
   const [trade, setTrade] = useState([]); //
 
-  let testCoinCode = "KRW-ETH";
+  let testCoinCode = "KRW-BTC";
   let arr = [];
+
+  //
+  // candle
+  // const [candle, setCandle] = useState([]);
+  const [dayCandle, setDayCandle] = useState([]);
+  // candle
+  const axiosOptions = {
+    method: "GET",
+    url: "https://api.upbit.com/v1/candles/days",
+    params: { market: testCoinCode, count: "100" },
+    headers: { accept: "application/json" },
+  };
 
   useEffect(() => {
     getPrice();
     getOrderbook();
     getTrade();
+    getCandle();
   }, []);
+
+  useEffect(() => {
+    if (price) {
+      rerenderChart();
+    }
+  }, [price]);
 
   function getPrice() {
     try {
@@ -73,7 +94,6 @@ const Main = () => {
     }
   }
 
-  //getTrade 이 함수는 건들일없음
   function getTrade() {
     try {
       const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
@@ -95,11 +115,37 @@ const Main = () => {
     }
   }
 
+  async function getCandle() {
+    let fetch = await axios
+      .get(axiosOptions.url, axiosOptions)
+      .then((res) => res.data);
+    let newArr = [];
+    fetch.reverse().map((data) => {
+      newArr.push({
+        close: data.trade_price,
+        high: data.high_price,
+        low: data.low_price,
+        open: data.opening_price,
+        timestamp: data.timestamp,
+        volume: data.candle_acc_trade_volume,
+      });
+    });
+    setDayCandle(newArr);
+    // setCandle(newArr);
+  }
+
+  function rerenderChart() {
+    let arr = [...dayCandle];
+    arr[99].close = price;
+    setDayCandle(arr);
+  }
+
   return (
     <div>
       <div>웹소켓 테스트</div>
       <div>{price.toLocaleString()}</div>
       <div>{orderPrice.toLocaleString()}</div>
+      <Chart price={price} dayCandle={dayCandle} />
       <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}

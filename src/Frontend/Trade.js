@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const Trade = ({ trade }) => {
@@ -18,7 +17,7 @@ const Trade = ({ trade }) => {
           .slice(0)
           .reverse()
           .map((data, i) => (
-            <Line>
+            <Line key={i}>
               <List>{data.trade_time}</List>
               <List>{formatter(data.trade_price)}</List>
               <List
@@ -46,14 +45,15 @@ const Center = styled.div`
 `;
 
 const TradeContainer = styled.div`
-  margin: 20px 0px;
+  margin: 40px 0px;
   padding: 5px;
   width: 100%;
   max-width: 480px;
-  height: 600px;
+  height: 300px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+  /* border: 1px solid black; */
 `;
 
 const Header = styled.div`
