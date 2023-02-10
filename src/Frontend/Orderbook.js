@@ -38,7 +38,7 @@ const Orderbook = ({
           <HogaList bgColor="#F9FAFC">
             <div>{numberFormatter(orderbookSumInfo[1])}</div>
           </HogaList>
-          <HogaList bgColor="#F9FAFC"></HogaList>
+          <HogaList bgColor="#F9FAFC">호가</HogaList>
           <HogaList bgColor="#F9FAFC">
             <div>{numberFormatter(orderbookSumInfo[2])}</div>
           </HogaList>
@@ -125,9 +125,10 @@ const OrderbookContainer = styled.div`
   padding: 5px;
   width: 100%;
   max-width: 480px;
-  justify-content: space-around;
+  height: 600px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
 `;
 
 const Header = styled.div`
@@ -140,11 +141,9 @@ const Header = styled.div`
 `;
 
 const Hoga = styled.div`
-  padding: 1px;
   width: 100%;
   justify-content: space-around;
   display: flex;
-
   &:hover {
     cursor: pointer;
     opacity: 0.7;
@@ -153,11 +152,13 @@ const Hoga = styled.div`
 `;
 
 const HogaList = styled.div`
+  position: relative;
   width: 32%;
   height: 25px;
   display: flex;
   justify-content: center;
   margin: 1px;
+  margin-bottom: 4px;
   padding-top: 3px;
   font-size: 17px;
   font-weight: 600;
@@ -166,7 +167,7 @@ const HogaList = styled.div`
   color: #343a40;
 
   p {
-    font-weight: 400;
+    font-weight: 600;
     margin: 0;
     margin-top: 4px;
     position: absolute;

@@ -1,34 +1,40 @@
 import React, { useEffect, useState } from "react";
 import Orderbook from "./Orderbook";
+import Trade from "./Trade";
 
 const Main = () => {
-  const [price, setPrice] = useState(0);
-  const [changePrice, setChangePrice] = useState(0);
-  const [orderbook, setOrderbook] = useState([]);
-  const [orderbookSumInfo, setOrderbookSumInfo] = useState([]);
+  const [price, setPrice] = useState(0); // 가격
+  const [changePrice, setChangePrice] = useState(0); // [어제 종가, 현재 등락율]
+  const [orderbook, setOrderbook] = useState([]); // 호가 배열
+  const [orderbookSumInfo, setOrderbookSumInfo] = useState([]); // [timestamp, sum, sum]
+  const [orderPrice, setOrderPrice] = useState(0); // 내가 호가창에서 선택한 가격
 
-  const [orderPrice, setOrderPrice] = useState(0);
+  //
+  const [trade, setTrade] = useState([]); //
+
+  let testCoinCode = "KRW-ETH";
+  let arr = [];
 
   useEffect(() => {
     getPrice();
     getOrderbook();
+    getTrade();
   }, []);
-
-  useEffect(() => {
-    // console.log(orderbook);
-  }, [orderbook]);
 
   function getPrice() {
     try {
       const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
       ws.onopen = () => {
-        ws.send(`[{"ticket" : "2"}, {"type" : "ticker","codes": ["KRW-BTC"]}]`);
+        ws.send(
+          `[{"ticket" : "2"}, {"type" : "ticker","codes": [${testCoinCode}]}]`
+        );
       };
       ws.onmessage = async (e) => {
         const { data } = e;
         const text = await new Response(data).json();
         setPrice(text.trade_price);
         setChangePrice([text.prev_closing_price, text.signed_change_rate]);
+        // console.log(text);
       };
     } catch (e) {
       console.log(e);
@@ -39,7 +45,9 @@ const Main = () => {
     try {
       const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
       ws.onopen = () => {
-        ws.send(`[{"ticket":"3"},{"type":"orderbook","codes": ["KRW-BTC"]}]`);
+        ws.send(
+          `[{"ticket":"3"},{"type":"orderbook","codes": [${testCoinCode}]}]`
+        );
       };
       ws.onmessage = async (e) => {
         const { data } = e;
@@ -65,6 +73,28 @@ const Main = () => {
     }
   }
 
+  //getTrade 이 함수는 건들일없음
+  function getTrade() {
+    try {
+      const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
+      ws.onopen = () => {
+        ws.send(`[{"ticket":"4"},{"type":"trade","codes": [${testCoinCode}]}]`);
+      };
+      ws.onmessage = async (e) => {
+        const { data } = e;
+        const text = await new Response(data).json();
+        if (arr.length >= 20) {
+          arr.shift();
+        }
+        arr.push(text);
+
+        setTrade(arr);
+      };
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
   return (
     <div>
       <div>웹소켓 테스트</div>
@@ -77,6 +107,7 @@ const Main = () => {
         changePrice={changePrice}
         setOrderPrice={setOrderPrice}
       />
+      <Trade trade={trade} />
     </div>
   );
 };
