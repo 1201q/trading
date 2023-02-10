@@ -3,7 +3,7 @@ import { ResponsiveBar } from "@nivo/bar";
 
 const Barchart = ({ hoga, color, max, reverse }) => {
   return (
-    <div style={{ width: "100%", height: "90%" }}>
+    <div style={{ width: "100%", height: "100%" }}>
       <ResponsiveBar
         data={[{ price: (hoga / max) * 100 }]}
         layout="horizontal"
@@ -13,11 +13,12 @@ const Barchart = ({ hoga, color, max, reverse }) => {
         isInteractive={false}
         enableGridY={false}
         enableLabel={false}
+        borderRadius={4}
         axisRight={null}
         axisLeft={null}
         axisBottom={null}
         reverse={reverse}
-        animate={false}
+        animate={true}
         minValue={0}
         maxValue={100}
         valueScale={{ type: "symlog" }}

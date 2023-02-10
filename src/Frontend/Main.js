@@ -3,6 +3,7 @@ import Orderbook from "./Orderbook";
 import Trade from "./Trade";
 import Chart from "./Chart";
 import axios from "axios";
+import Orderbook2 from "./Orderbook2";
 
 const Main = () => {
   const [price, setPrice] = useState(0); // 가격
@@ -146,7 +147,14 @@ const Main = () => {
       <div>{price.toLocaleString()}</div>
       <div>{orderPrice.toLocaleString()}</div>
       <Chart price={price} dayCandle={dayCandle} />
-      <Orderbook
+      {/* <Orderbook
+        orderbook={orderbook}
+        orderbookSumInfo={orderbookSumInfo}
+        price={price}
+        changePrice={changePrice}
+        setOrderPrice={setOrderPrice}
+      /> */}
+      <Orderbook2
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}
         price={price}
