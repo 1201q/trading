@@ -45,7 +45,7 @@ export default function Chart({ price, dayCandle }) {
     <Center>
       <div
         id="simple_chart"
-        style={{ height: 400, width: "100%", maxWidth: "480px" }}
+        style={{ height: 400, width: "100%", maxWidth: "450px" }}
       />
     </Center>
   );

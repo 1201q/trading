@@ -35,13 +35,9 @@ const Orderbook = ({
     <Center>
       <OrderbookContainer>
         <Header>
-          <HogaList bgColor="#F9FAFC">
-            <div>{numberFormatter(orderbookSumInfo[1])}</div>
-          </HogaList>
-          <HogaList bgColor="#F9FAFC">호가</HogaList>
-          <HogaList bgColor="#F9FAFC">
-            <div>{numberFormatter(orderbookSumInfo[2])}</div>
-          </HogaList>
+          <HogaList>{numberFormatter(orderbookSumInfo[1])}</HogaList>
+          <HogaList>호가</HogaList>
+          <HogaList>{numberFormatter(orderbookSumInfo[2])}</HogaList>
         </Header>
         {orderbook.map((data, i) => (
           <Hoga
@@ -121,23 +117,32 @@ const Center = styled.div`
 `;
 
 const OrderbookContainer = styled.div`
-  margin: 40px 0px;
-  padding: 5px;
-  width: 100%;
-  max-width: 480px;
-  height: 600px;
+  margin: 0px 0px;
+  padding: 10px 15px 15px 15px;
+  margin-top: 20px;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #eeeeee;
+  width: 87%;
+  max-width: 420px;
+  height: 620px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
+
+  -ms-overflow-style: none;
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Header = styled.div`
   width: 100%;
   justify-content: space-around;
   display: flex;
-  margin-bottom: 3px;
-  font-size: 20px;
   background-color: ${(props) => props.bgColor};
+  margin-bottom: 5px;
 `;
 
 const Hoga = styled.div`
@@ -154,20 +159,19 @@ const Hoga = styled.div`
 const HogaList = styled.div`
   position: relative;
   width: 32%;
-  height: 25px;
+  height: 27px;
   display: flex;
   justify-content: center;
   margin: 1px;
   margin-bottom: 4px;
-  padding-top: 3px;
-  font-size: 17px;
-  font-weight: 600;
+  padding-top: 4px;
+  font-size: 18px;
+  font-weight: 300;
   background-color: ${(props) => props.bgColor};
   box-shadow: ${(props) => props.border};
-  color: #343a40;
-
+  color: #9e9e9e;
   p {
-    font-weight: 600;
+    font-weight: 300;
     margin: 0;
     margin-top: 4px;
     position: absolute;
@@ -181,7 +185,8 @@ const HogaPrice = styled.div`
   width: 100px;
   display: flex;
   justify-content: center;
-  font-size: 15px;
+  font-size: 12px;
+  padding-top: 4px;
   margin-left: 15px;
   color: ${(props) => props.fontColor};
 `;
@@ -191,7 +196,7 @@ const HogaChangePrice = styled.div`
   display: flex;
   justify-content: flex-end;
   text-align: center;
-  font-size: 7px;
+  font-size: 5px;
   margin-right: 5px;
   padding-top: 5px;
   color: ${(props) => props.fontColor};

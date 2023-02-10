@@ -17,13 +17,10 @@ const Trade = ({ trade }) => {
           .slice(0)
           .reverse()
           .map((data, i) => (
-            <Line key={i}>
+            <Line key={i} sbgColor={i % 2 === 0 ? "white" : "#F9fafc"}>
               <List>{data.trade_time}</List>
               <List>{formatter(data.trade_price)}</List>
-              <List
-                style={{ fontWeight: 600 }}
-                fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}
-              >
+              <List fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}>
                 {data.trade_volume.toFixed(8)}
               </List>
               <List>
@@ -45,11 +42,14 @@ const Center = styled.div`
 `;
 
 const TradeContainer = styled.div`
-  margin: 40px 0px;
-  padding: 5px;
-  width: 100%;
-  max-width: 480px;
-  height: 300px;
+  margin: 20px 0px;
+  border-radius: 10px;
+  background-color: white;
+  border: 1px solid #eeeeee;
+  width: 87%;
+  padding: 15px 15px;
+  max-width: 420px; // padding 15 없음
+  height: 320px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -59,23 +59,27 @@ const TradeContainer = styled.div`
 const Header = styled.div`
   display: flex;
   width: 100%;
-  justify-content: space-around;
-  display: flex;
-  margin-bottom: 3px;
-  font-size: 20px;
-  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: #9e9e9e;
+  font-weight: 300;
+  text-align: center;
 `;
 
 const Line = styled.div`
   display: flex;
+  background-color: ${(props) => props.sbgColor};
+  padding: 5px 0px;
 `;
 
 const List = styled.div`
+  font-size: 13px;
   text-align: center;
   color: ${(props) => props.fontColor};
-  display: flex;
-  justify-content: center;
 
+  display: flex;
+  justify-content: flex-start;
+  font-weight: 300;
   width: 100%;
 `;
 export default Trade;
