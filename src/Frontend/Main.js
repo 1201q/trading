@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
-import Orderbook from "./Orderbook";
 import Trade from "./Trade";
 import Chart from "./Chart";
 import axios from "axios";
-import Orderbook2 from "./Orderbook2";
+import Orderbook from "./Orderbook";
+import CoinInfo from "./CoinInfo";
 
 const Main = () => {
   const [price, setPrice] = useState(0); // 가격
-  const [changePrice, setChangePrice] = useState(0); // [어제 종가, 현재 등락율]
+  const [changePrice, setChangePrice] = useState([]); // [어제 종가, 현재 등락율]
+  const [morePriceInfo, setMorePriceInfo] = useState([]);
   const [orderbook, setOrderbook] = useState([]); // 호가 배열
   const [orderbookSumInfo, setOrderbookSumInfo] = useState([]); // [timestamp, sum, sum]
   const [orderPrice, setOrderPrice] = useState(0); // 내가 호가창에서 선택한 가격
@@ -18,9 +19,6 @@ const Main = () => {
   let testCoinCode = "KRW-BTC";
   let arr = [];
 
-  //
-  // candle
-  // const [candle, setCandle] = useState([]);
   const [dayCandle, setDayCandle] = useState([]);
   // candle
   const axiosOptions = {
@@ -55,8 +53,21 @@ const Main = () => {
         const { data } = e;
         const text = await new Response(data).json();
         setPrice(text.trade_price);
-        setChangePrice([text.prev_closing_price, text.signed_change_rate]);
-        // console.log(text);
+        setChangePrice([
+          text.prev_closing_price,
+          text.signed_change_rate,
+          text.signed_change_price,
+          text.change,
+        ]);
+        setMorePriceInfo([
+          text.high_price,
+          text.low_price,
+          text.acc_trade_volume_24h,
+          text.acc_trade_price_24h,
+          [text.highest_52_week_date, text.highest_52_week_price],
+          [text.lowest_52_week_date, text.lowest_52_week_price],
+        ]);
+        console.log(text);
       };
     } catch (e) {
       console.log(e);
@@ -143,18 +154,16 @@ const Main = () => {
 
   return (
     <div>
-      <div>웹소켓 테스트</div>
+      {/* <div>웹소켓 테스트</div>
       <div>{price.toLocaleString()}</div>
-      <div>{orderPrice.toLocaleString()}</div>
-      <Chart price={price} dayCandle={dayCandle} />
-      {/* <Orderbook
-        orderbook={orderbook}
-        orderbookSumInfo={orderbookSumInfo}
+      <div>{orderPrice.toLocaleString()}</div> */}
+      <CoinInfo
         price={price}
         changePrice={changePrice}
-        setOrderPrice={setOrderPrice}
-      /> */}
-      <Orderbook2
+        morePriceInfo={morePriceInfo}
+      />
+      {/* <Chart price={price} dayCandle={dayCandle} /> */}
+      <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}
         price={price}

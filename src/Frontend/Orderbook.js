@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import Barchart from "./BarChart";
+import OrderbookPriceBar from "./OrderbookPriceBar";
 
 const Orderbook = ({
   orderbook,
@@ -34,11 +34,11 @@ const Orderbook = ({
   return (
     <Center>
       <OrderbookContainer>
-        <Header>
+        {/* <Header>
           <HogaList>{numberFormatter(orderbookSumInfo[1])}</HogaList>
           <HogaList>호가</HogaList>
           <HogaList>{numberFormatter(orderbookSumInfo[2])}</HogaList>
-        </Header>
+        </Header> */}
         {orderbook.map((data, i) => (
           <Hoga
             key={data[0]}
@@ -46,34 +46,26 @@ const Orderbook = ({
               setOrderPrice(data[0]);
             }}
           >
-            <HogaList bgColor={i > 14 ? "" : "#ecf3fa"}>
-              {i <= 14 ? <p>{numberFormatter(data[1])}</p> : " "}
-              {i <= 14 ? (
-                <Barchart
+            <HogaBar>
+              {i > 14 ? (
+                <OrderbookPriceBar
                   hoga={Number(data[1])}
-                  color={"#d0dff3"}
-                  max={orderbookSumInfo[1]}
-                  reverse={true}
+                  color={"#FFEFF1"}
+                  max={orderbookSumInfo[2]}
+                  reverse={false}
                 />
               ) : (
-                " "
+                <OrderbookPriceBar
+                  hoga={Number(data[1])}
+                  color={"#E3F2FF"}
+                  max={orderbookSumInfo[1]}
+                  reverse={false}
+                />
               )}
-            </HogaList>
-            <HogaList
-              bgColor={i > 14 ? "#fbf1ef" : "#ecf3fa"}
-              border={data[0] === price && "0 0 0 1.5px #343A40 inset"}
-            >
-              <HogaPrice
-                fontColor={
-                  ((data[0] - changePrice[0]) / changePrice[0]) * 100 < 0
-                    ? "#3c87e5"
-                    : ((data[0] - changePrice[0]) / changePrice[0]) * 100 === 0
-                    ? "#343A40"
-                    : "#CD614D"
-                }
-              >
-                {numberFormatter(data[0])}
-              </HogaPrice>
+              <p>{numberFormatter(data[1])}</p>
+            </HogaBar>
+            <HogaList border={data[0] === price && "0 0 0 1.5px #343A40 inset"}>
+              {" "}
               <HogaChangePrice
                 fontColor={
                   ((data[0] - changePrice[0]) / changePrice[0]) * 100 < 0
@@ -87,19 +79,17 @@ const Orderbook = ({
                   ((data[0] - changePrice[0]) / changePrice[0]) * 100
                 )}
               </HogaChangePrice>
-            </HogaList>
-            <HogaList bgColor={i <= 14 ? "" : "#fbf1ef"}>
-              {i > 14 ? (
-                <Barchart
-                  hoga={Number(data[1])}
-                  color={"#F4DbD6"}
-                  max={orderbookSumInfo[2]}
-                  reverse={false}
-                />
-              ) : (
-                " "
-              )}
-              {i > 14 ? <p>{numberFormatter(data[1])}</p> : " "}
+              <HogaPrice
+                fontColor={
+                  ((data[0] - changePrice[0]) / changePrice[0]) * 100 < 0
+                    ? "#3c87e5"
+                    : ((data[0] - changePrice[0]) / changePrice[0]) * 100 === 0
+                    ? "#343A40"
+                    : "#CD614D"
+                }
+              >
+                {numberFormatter(data[0])}
+              </HogaPrice>
             </HogaList>
           </Hoga>
         ))}
@@ -147,8 +137,8 @@ const Header = styled.div`
 
 const Hoga = styled.div`
   width: 100%;
-  justify-content: space-around;
   display: flex;
+  justify-content: space-between;
   &:hover {
     cursor: pointer;
     opacity: 0.7;
@@ -156,49 +146,54 @@ const Hoga = styled.div`
   }
 `;
 
-const HogaList = styled.div`
+const HogaBar = styled.div`
   position: relative;
-  width: 32%;
-  height: 27px;
+  width: 70%;
+  height: 30px;
   display: flex;
-  justify-content: center;
-  margin: 1px;
-  margin-bottom: 4px;
-  padding-top: 4px;
-  font-size: 18px;
-  font-weight: 300;
+  justify-content: flex-start;
+  margin-bottom: 2px;
   background-color: ${(props) => props.bgColor};
   box-shadow: ${(props) => props.border};
   color: #9e9e9e;
   p {
     font-weight: 300;
     margin: 0;
-    margin-top: 4px;
+    margin-top: 7px;
+    padding-left: 5px;
     position: absolute;
     z-index: 2;
     color: #60656b;
-    font-size: 12px;
+    font-size: 13px;
   }
 `;
 
-const HogaPrice = styled.div`
-  width: 100px;
+const HogaList = styled.div`
+  height: 30px;
   display: flex;
-  justify-content: center;
-  font-size: 12px;
-  padding-top: 4px;
-  margin-left: 15px;
+  justify-content: space-between;
+  margin-bottom: 2px;
+  padding: 0px 4px;
+  background-color: ${(props) => props.bgColor};
+  border-radius: 5px;
+  box-shadow: ${(props) => props.border};
+  color: #9e9e9e;
+`;
+
+const HogaPrice = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  font-size: 16px;
+  font-weight: 500;
+  margin-left: 10px;
   color: ${(props) => props.fontColor};
 `;
 
 const HogaChangePrice = styled.div`
-  width: 40px;
   display: flex;
-  justify-content: flex-end;
-  text-align: center;
+  align-items: center;
   font-size: 11px;
-  margin-right: 5px;
-  padding-top: 5px;
   color: ${(props) => props.fontColor};
 `;
 

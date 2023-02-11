@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ResponsiveBar } from "@nivo/bar";
 
-const Barchart = ({ hoga, color, max, reverse }) => {
+const OrderbookPriceBar = ({ hoga, color, max, reverse }) => {
   return (
     <div style={{ width: "100%", height: "100%" }}>
       <ResponsiveBar
@@ -27,4 +27,4 @@ const Barchart = ({ hoga, color, max, reverse }) => {
   );
 };
 
-export default Barchart;
+export default OrderbookPriceBar;
