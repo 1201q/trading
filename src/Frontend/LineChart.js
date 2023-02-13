@@ -19,8 +19,10 @@ const LineChart = ({ candle }) => {
     });
 
     chart.timeScale().applyOptions({
-      barSpacing: 6,
+      barSpacing: 1,
       borderVisible: false,
+      fixLeftEdge: true,
+      fixRightEdge: true,
     });
     chart.timeScale().fitContent();
 

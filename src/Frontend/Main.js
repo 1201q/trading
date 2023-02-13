@@ -18,7 +18,7 @@ const Main = () => {
   //
   const [trade, setTrade] = useState([]); //
 
-  let testCoinCode = "KRW-DOGE";
+  let testCoinCode = "KRW-BTC";
   let arr = [];
 
   const [dayCandle, setDayCandle] = useState([]);
@@ -26,8 +26,12 @@ const Main = () => {
   // candle
   const axiosOptions = {
     method: "GET",
-    url: "https://api.upbit.com/v1/candles/days",
-    params: { market: testCoinCode, count: "200" },
+    // url: "https://api.upbit.com/v1/candles/days",
+    url: "https://api.upbit.com/v1/candles/minutes/10",
+    params: {
+      market: testCoinCode,
+      count: "200",
+    },
     headers: { accept: "application/json" },
   };
 
@@ -130,6 +134,17 @@ const Main = () => {
     let newArr = [];
     let newArr2 = [];
 
+    let newArr3 = [];
+
+    fetch
+      .filter((data) => {
+        data.candle_date_time_kst.includes("2023-02-13");
+      })
+      .map((data) => {
+        newArr3.push(data);
+      });
+    console.log(newArr3);
+
     fetch.reverse().map((data) => {
       newArr.push({
         time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
@@ -139,15 +154,24 @@ const Main = () => {
         close: data.trade_price,
       });
     });
+    setDayCandle(newArr);
 
+    //1111111111111
+    // fetch.map((data) => {
+    //   newArr2.push({
+    //     value: data.trade_price,
+    //     time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
+    //   });
+    // });
+
+    ///22222222222222222222
     fetch.map((data) => {
       newArr2.push({
         value: data.trade_price,
-        time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
+        time: dayjs(data.timestamp).unix(),
       });
     });
-    console.log(newArr);
-    setDayCandle(newArr);
+
     setCandle(newArr2);
   }
 
