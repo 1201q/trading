@@ -1,5 +1,6 @@
 import styled from "styled-components";
-const CoinInfo = ({ price, changePrice, morePriceInfo }) => {
+import LineChart from "./LineChart";
+const CoinInfo = ({ price, changePrice, morePriceInfo, candle }) => {
   const numberFormatter = (n) => {
     let newNumber = n;
     if (n >= 1 && n < 100) {
@@ -65,6 +66,7 @@ const CoinInfo = ({ price, changePrice, morePriceInfo }) => {
             <MoreInfoData>{numberFormatter(morePriceInfo[3])}</MoreInfoData>
           </div>
         </MoreInfo>
+        {candle.length > 1 ? <LineChart candle={candle} /> : ""}
       </CoinInfoContainer>
     </Center>
   );
@@ -80,7 +82,7 @@ const Center = styled.div`
 
 const CoinInfoContainer = styled.div`
   margin: 0px 0px;
-  padding: 10px 15px 15px 15px;
+  padding: 15px 15px 0px 15px;
   margin-top: 10px;
   border-radius: 10px;
   background-color: white;

@@ -4,6 +4,8 @@ import Chart from "./Chart";
 import axios from "axios";
 import Orderbook from "./Orderbook";
 import CoinInfo from "./CoinInfo";
+import LineChart from "./LineChart";
+import dayjs from "dayjs";
 
 const Main = () => {
   const [price, setPrice] = useState(0); // 가격
@@ -16,15 +18,16 @@ const Main = () => {
   //
   const [trade, setTrade] = useState([]); //
 
-  let testCoinCode = "KRW-BTC";
+  let testCoinCode = "KRW-DOGE";
   let arr = [];
 
   const [dayCandle, setDayCandle] = useState([]);
+  const [candle, setCandle] = useState([]);
   // candle
   const axiosOptions = {
     method: "GET",
     url: "https://api.upbit.com/v1/candles/days",
-    params: { market: testCoinCode, count: "100" },
+    params: { market: testCoinCode, count: "200" },
     headers: { accept: "application/json" },
   };
 
@@ -34,12 +37,6 @@ const Main = () => {
     getTrade();
     getCandle();
   }, []);
-
-  useEffect(() => {
-    if (price) {
-      rerenderChart();
-    }
-  }, [price]);
 
   function getPrice() {
     try {
@@ -67,7 +64,6 @@ const Main = () => {
           [text.highest_52_week_date, text.highest_52_week_price],
           [text.lowest_52_week_date, text.lowest_52_week_price],
         ]);
-        console.log(text);
       };
     } catch (e) {
       console.log(e);
@@ -132,37 +128,37 @@ const Main = () => {
       .get(axiosOptions.url, axiosOptions)
       .then((res) => res.data);
     let newArr = [];
+    let newArr2 = [];
+
     fetch.reverse().map((data) => {
       newArr.push({
-        close: data.trade_price,
+        time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
+        open: data.opening_price,
         high: data.high_price,
         low: data.low_price,
-        open: data.opening_price,
-        timestamp: data.timestamp,
-        volume: data.candle_acc_trade_volume,
+        close: data.trade_price,
       });
     });
-    setDayCandle(newArr);
-    // setCandle(newArr);
-  }
 
-  function rerenderChart() {
-    let arr = [...dayCandle];
-    arr[99].close = price;
-    setDayCandle(arr);
+    fetch.map((data) => {
+      newArr2.push({
+        value: data.trade_price,
+        time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
+      });
+    });
+    console.log(newArr);
+    setDayCandle(newArr);
+    setCandle(newArr2);
   }
 
   return (
     <div>
-      {/* <div>웹소켓 테스트</div>
-      <div>{price.toLocaleString()}</div>
-      <div>{orderPrice.toLocaleString()}</div> */}
       <CoinInfo
         price={price}
         changePrice={changePrice}
         morePriceInfo={morePriceInfo}
+        candle={candle}
       />
-      {/* <Chart price={price} dayCandle={dayCandle} /> */}
       <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}
