@@ -134,8 +134,6 @@ const Main = () => {
     let newArr = [];
     let today = dayjs().format("YYYY-MM-DD");
 
-    console.log(fetch);
-
     // 오늘 10분봉
     fetch.filter((data) => {
       if (data.candle_date_time_utc.includes(today)) {
@@ -147,22 +145,18 @@ const Main = () => {
         return;
       }
     });
-    console.log(newArr);
 
     let length = newArr.length;
     newArr = newArr.reverse();
 
-    for (let i = 1; i <= 145 - length; i++) {
+    for (let i = length; i <= 144; i++) {
       newArr.push({
-        time: dayjs(newArr[length - 1].utc)
+        time: dayjs
+          .unix(newArr[0].time)
           .add(10 * i, "minute")
-          .add(18, "h")
           .unix(),
       });
     }
-
-    // console.log(newArr);
-    let backup = newArr;
     setCandle(newArr);
   }
 

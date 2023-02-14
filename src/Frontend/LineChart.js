@@ -18,15 +18,14 @@ const LineChart = ({ candle, price }) => {
 
   useEffect(() => {
     c();
-    console.log(candle);
   }, [candle]);
 
   const c = () => {
     const chartOptions = {
-      height: 100,
+      height: 130,
     };
-
     const chart = createChart(containerRef.current, chartOptions);
+
     const candlestickSeries = chart.addAreaSeries({
       lineColor: "#2962FF",
       topColor: "#2962FF",
@@ -34,9 +33,7 @@ const LineChart = ({ candle, price }) => {
       priceLineVisible: true,
     });
 
-    candlestickSeries.update({ value: price, time: candle[lastindex] });
-
-    // candlestickSeries.update({time:})
+    candlestickSeries.update({ time: candle[lastindex], value: price });
 
     chart.applyOptions({
       rightPriceScale: {
