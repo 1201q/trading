@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Trade from "./Trade";
-import Chart from "./Chart";
+// import Chart from "./Chart";
 import axios from "axios";
 import Orderbook from "./Orderbook";
 import CoinInfo from "./CoinInfo";
@@ -21,7 +21,7 @@ const Main = () => {
   let testCoinCode = "KRW-BTC";
   let arr = [];
 
-  const [dayCandle, setDayCandle] = useState([]);
+  // const [dayCandle, setDayCandle] = useState([]);
   const [candle, setCandle] = useState([]);
   // candle
   const axiosOptions = {
@@ -30,7 +30,7 @@ const Main = () => {
     url: "https://api.upbit.com/v1/candles/minutes/10",
     params: {
       market: testCoinCode,
-      count: "200",
+      count: "145",
     },
     headers: { accept: "application/json" },
   };
@@ -132,47 +132,88 @@ const Main = () => {
       .get(axiosOptions.url, axiosOptions)
       .then((res) => res.data);
     let newArr = [];
-    let newArr2 = [];
+    let today = dayjs().format("YYYY-MM-DD");
 
-    let newArr3 = [];
+    console.log(fetch);
 
-    fetch
-      .filter((data) => {
-        data.candle_date_time_kst.includes("2023-02-13");
-      })
-      .map((data) => {
-        newArr3.push(data);
-      });
-    console.log(newArr3);
+    // 오늘 10분봉
+    fetch.filter((data) => {
+      if (data.candle_date_time_utc.includes(today)) {
+        newArr.push({
+          value: data.trade_price,
+          time: dayjs(data.candle_date_time_utc).add(18, "h").unix(),
+        });
+      } else {
+        return;
+      }
+    });
+    console.log(newArr);
 
-    fetch.reverse().map((data) => {
+    let length = newArr.length;
+    newArr = newArr.reverse();
+
+    for (let i = 1; i <= 145 - length; i++) {
       newArr.push({
-        time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
-        open: data.opening_price,
-        high: data.high_price,
-        low: data.low_price,
-        close: data.trade_price,
+        time: dayjs(newArr[length - 1].utc)
+          .add(10 * i, "minute")
+          .add(18, "h")
+          .unix(),
       });
-    });
-    setDayCandle(newArr);
+    }
 
-    //1111111111111
-    // fetch.map((data) => {
-    //   newArr2.push({
-    //     value: data.trade_price,
-    //     time: dayjs(data.candle_date_time_kst).format("YYYY-MM-DD"),
-    //   });
-    // });
+    // console.log(newArr);
+    let backup = newArr;
+    setCandle(newArr);
+  }
 
-    ///22222222222222222222
-    fetch.map((data) => {
-      newArr2.push({
-        value: data.trade_price,
-        time: dayjs(data.timestamp).unix(),
+  function backup() {
+    async function getCandle() {
+      let fetch = await axios
+        .get(axiosOptions.url, axiosOptions)
+        .then((res) => res.data);
+      let newArr = [];
+      let today = dayjs().format("YYYY-MM-DD");
+
+      console.log(fetch);
+
+      // 오늘 10분봉
+      fetch.filter((data) => {
+        if (data.candle_date_time_utc.includes(today)) {
+          newArr.push({
+            value: data.trade_price,
+            time: dayjs(data.candle_date_time_utc).add(18, "h").unix(),
+            utc: data.candle_date_time_utc,
+            kst: data.candle_date_time_kst,
+          });
+        } else {
+          return;
+        }
       });
-    });
+      console.log(newArr);
 
-    setCandle(newArr2);
+      let length = newArr.length;
+      newArr = newArr.reverse();
+
+      for (let i = 1; i <= 145 - length; i++) {
+        newArr.push({
+          time: dayjs(newArr[length - 1].utc)
+            .add(10 * i, "minute")
+            .add(18, "h")
+            .unix(),
+          utc: dayjs(newArr[length - 1].utc)
+            .add(10 * i, "minute")
+            .format(""),
+          kst: dayjs(newArr[length - 1].utc)
+            .add(10 * i, "minute")
+            .add(9, "h")
+            .format(""),
+        });
+      }
+
+      // console.log(newArr);
+      let backup = newArr;
+      setCandle(newArr);
+    }
   }
 
   return (

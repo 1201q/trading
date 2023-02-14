@@ -66,7 +66,7 @@ const CoinInfo = ({ price, changePrice, morePriceInfo, candle }) => {
             <MoreInfoData>{numberFormatter(morePriceInfo[3])}</MoreInfoData>
           </div>
         </MoreInfo>
-        {candle.length > 1 ? <LineChart candle={candle} /> : ""}
+        {candle.length > 1 ? <LineChart candle={candle} price={price} /> : ""}
       </CoinInfoContainer>
     </Center>
   );
@@ -82,7 +82,7 @@ const Center = styled.div`
 
 const CoinInfoContainer = styled.div`
   margin: 0px 0px;
-  padding: 15px 15px 0px 15px;
+  padding: 15px 15px 15px 15px;
   margin-top: 10px;
   border-radius: 10px;
   background-color: white;
