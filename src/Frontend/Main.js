@@ -6,6 +6,7 @@ import Orderbook from "./Orderbook";
 import CoinInfo from "./CoinInfo";
 import LineChart from "./LineChart";
 import dayjs from "dayjs";
+import BongChart from "./BongChart";
 
 const Main = () => {
   const [price, setPrice] = useState(0); // 가격
@@ -26,11 +27,12 @@ const Main = () => {
   // candle
   const axiosOptions = {
     method: "GET",
-    // url: "https://api.upbit.com/v1/candles/days",
-    url: "https://api.upbit.com/v1/candles/minutes/10",
+    url: "https://api.upbit.com/v1/candles/days",
+    // url: "https://api.upbit.com/v1/candles/minutes/10",
     params: {
       market: testCoinCode,
-      count: "145",
+      // count: "145",
+      count: "200",
     },
     headers: { accept: "application/json" },
   };
@@ -131,9 +133,14 @@ const Main = () => {
     let fetch = await axios
       .get(axiosOptions.url, axiosOptions)
       .then((res) => res.data);
+    console.log(fetch);
+    dayCandle(fetch);
+    // minCandle(fetch);
+  }
+
+  function minCandle(fetch) {
     let newArr = [];
     let today = dayjs().format("YYYY-MM-DD");
-
     // 오늘 10분봉
     fetch.filter((data) => {
       if (data.candle_date_time_utc.includes(today)) {
@@ -158,6 +165,21 @@ const Main = () => {
       });
     }
     setCandle(newArr);
+  }
+
+  const [test, setTest] = useState(0); // 봉차트 테스트
+  function dayCandle(fetch) {
+    let arr = [];
+    fetch.reverse().map((data, i) => {
+      arr[i] = {
+        open: data.opening_price,
+        high: data.high_price,
+        low: data.low_price,
+        close: data.trade_price,
+        time: dayjs(data.candle_date_time_utc).add(9, "hour").unix(),
+      };
+    });
+    setTest(arr);
   }
 
   function backup() {
@@ -218,6 +240,7 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
+      <BongChart test={test} price={price} />
       <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}

@@ -41,7 +41,7 @@ const CoinInfo = ({ price, changePrice, morePriceInfo, candle }) => {
             {percentageFormatter(changePrice[1] * 100)}
           </PriceInfo>
           <PriceInfo fSize="12px" fMarginTop="10px">
-            {numberFormatter(changePrice[2])}
+            {changePrice[2] && changePrice[2].toLocaleString()}
           </PriceInfo>
         </Info>
         <MoreInfo>
@@ -66,7 +66,7 @@ const CoinInfo = ({ price, changePrice, morePriceInfo, candle }) => {
             <MoreInfoData>{numberFormatter(morePriceInfo[3])}</MoreInfoData>
           </div>
         </MoreInfo>
-        {candle.length > 1 ? <LineChart candle={candle} price={price} /> : ""}
+        {/* {candle.length > 1 ? <LineChart candle={candle} price={price} /> : ""} */}
       </CoinInfoContainer>
     </Center>
   );
