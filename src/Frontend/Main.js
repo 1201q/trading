@@ -168,8 +168,10 @@ const Main = () => {
   }
 
   const [test, setTest] = useState(0); // 봉차트 테스트
+  const [volume, setVolume] = useState(0);
   function dayCandle(fetch) {
     let arr = [];
+    let vol = [];
     fetch.reverse().map((data, i) => {
       arr[i] = {
         open: data.opening_price,
@@ -179,6 +181,20 @@ const Main = () => {
         time: dayjs(data.candle_date_time_utc).add(9, "hour").unix(),
       };
     });
+
+    fetch.map((data, i) => {
+      vol[i] = {
+        time: dayjs(data.candle_date_time_utc).add(9, "hour").unix(),
+        value: data.candle_acc_trade_volume,
+        color:
+          arr[i].open >= arr[i].close
+            ? "rgba(23,99,182,0.3)"
+            : "rgba(225,35,67, 0.3)",
+      };
+    });
+    console.log(arr);
+    console.log(vol);
+    setVolume(vol);
     setTest(arr);
   }
 
@@ -240,7 +256,8 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
-      <BongChart test={test} price={price} />
+
+      <BongChart test={test} price={price} volume={volume} />
       <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}

@@ -1,5 +1,8 @@
 import styled from "styled-components";
 import LineChart from "./LineChart";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons";
+
 const CoinInfo = ({ price, changePrice, morePriceInfo, candle }) => {
   const numberFormatter = (n) => {
     let newNumber = n;
@@ -40,6 +43,7 @@ const CoinInfo = ({ price, changePrice, morePriceInfo, candle }) => {
           <PriceInfo fSize="12px" fMarginTop="10px">
             {percentageFormatter(changePrice[1] * 100)}
           </PriceInfo>
+
           <PriceInfo fSize="12px" fMarginTop="10px">
             {changePrice[2] && changePrice[2].toLocaleString()}
           </PriceInfo>
