@@ -1,12 +1,16 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 
 const List = () => {
   const [coinList, setCoinList] = useState([]);
+  // websocket
+  const wsURL = "wss://api.upbit.com/websocket/v1";
+  const wsDataList = useRef(null);
   useEffect(() => {
     getCoinList();
+    // getDataList();
   }, []);
 
   async function getCoinList() {
@@ -20,6 +24,33 @@ const List = () => {
     });
     setCoinList(arr);
   }
+
+  // function getDataList() {
+  //   if (wsDataList.current !== null) {
+  //     if (wsDataList.current.readyState === 1) {
+  //       wsDataList.current.close();
+  //       console.log("check");
+  //     }
+  //   }
+
+  //   try {
+  //     wsDataList.current = new WebSocket(wsURL);
+  //     wsDataList.current.onopen = () => {
+  //       wsDataList.current.send(
+  //         `[{"ticket" : "1"}, {"type" : "ticker","codes": [${coinList.map(
+  //           (data) => data[0]
+  //         )}]}]`
+  //       );
+  //     };
+  //     wsDataList.current.onmessage = async (e) => {
+  //       const { data } = e;
+  //       const text = await new Response(data).json();
+  //       console.log(text);
+  //     };
+  //   } catch (e) {
+  //     console.log(e);
+  //   }
+  // }
 
   return (
     <Center>

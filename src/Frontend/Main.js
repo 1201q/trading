@@ -173,7 +173,6 @@ const Main = () => {
     let fetch = await axios
       .get(axiosOptions.url, axiosOptions)
       .then((res) => res.data);
-    console.log(fetch);
     dayCandle(fetch);
   }
 

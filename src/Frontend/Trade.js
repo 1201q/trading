@@ -10,18 +10,14 @@ const Trade = ({ trade }) => {
   const formatter = (n) => {
     return n.toLocaleString();
   };
-  // const timeFormatter = (time) => {
-  //   if(Number(time.slice(0, 2)) + 9 > 15)
-  //   return Number(time.slice(0, 2));
-  // };
 
   return (
     <Center>
       <TradeContainer>
         <Header>
           <List Lwidth={"20%"}>체결시간</List>
-          <List Lwidth={"20%"}>체결가격</List>
-          <List Lwidth={"35%"}>체결량</List>
+          <List Lwidth={"25%"}>체결가격</List>
+          <List Lwidth={"30%"}>체결량</List>
           <List Lwidth={"25%"}>체결금액</List>
         </Header>
         {trade
@@ -32,12 +28,12 @@ const Trade = ({ trade }) => {
               <List Lwidth={"20%"}>
                 {dayjs(data.trade_timestamp).format("HH:mm:ss")}
               </List>
-              <List Lwidth={"20%"}>{formatter(data.trade_price)}</List>
+              <List Lwidth={"25%"}>{formatter(data.trade_price)}</List>
               <List
-                Lwidth={"35%"}
+                Lwidth={"30%"}
                 fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}
               >
-                {data.trade_volume.toFixed(8)}
+                {data.trade_volume.toFixed(6)}
               </List>
               <List Lwidth={"25%"}>
                 {formatter(Math.round(data.trade_volume * data.trade_price))}
