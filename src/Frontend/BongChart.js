@@ -3,7 +3,7 @@ import { createChart, PriceScaleMode } from "lightweight-charts";
 import styled from "styled-components";
 import dayjs from "dayjs";
 
-const BongChart = ({ price, test, volume }) => {
+const BongChart = ({ price, candleData, volume }) => {
   const chartContainerRef = useRef(null);
   const [chart, setChart] = useState(null);
   const [candleStickSeries, setCandleStickSeries] = useState(null);
@@ -70,15 +70,15 @@ const BongChart = ({ price, test, volume }) => {
   }, []);
 
   useEffect(() => {
-    if (test && volume && candleStickSeries && volumeSeries) {
-      candleStickSeries.setData(test);
+    if (candleData && volume && candleStickSeries && volumeSeries) {
+      candleStickSeries.setData(candleData);
       volumeSeries.setData(volume);
     }
-  }, [test, volume]);
+  }, [candleData, volume]);
 
   useEffect(() => {
     if (candleStickSeries) {
-      const lastData = test[test.length - 1];
+      const lastData = candleData[candleData.length - 1];
 
       if (lastData.high < price) {
         lastData.high = price;
@@ -116,7 +116,7 @@ const Center = styled.div`
 const CoinInfoContainer = styled.div`
   margin: 0px 0px 0px 0px;
   padding: 15px 15px 5px 15px;
-  margin-top: 10px;
+  margin-top: 20px;
   border-radius: 10px;
   background-color: white;
   border: 1px solid #eeeeee;

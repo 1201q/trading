@@ -1,29 +1,45 @@
+import dayjs from "dayjs";
+import { useEffect } from "react";
 import styled from "styled-components";
 
 const Trade = ({ trade }) => {
+  useEffect(() => {
+    console.log();
+  }, [trade]);
+
   const formatter = (n) => {
     return n.toLocaleString();
   };
+  // const timeFormatter = (time) => {
+  //   if(Number(time.slice(0, 2)) + 9 > 15)
+  //   return Number(time.slice(0, 2));
+  // };
+
   return (
     <Center>
       <TradeContainer>
         <Header>
-          <List>체결시간</List>
-          <List>체결가격</List>
-          <List>체결량</List>
-          <List>체결금액</List>
+          <List Lwidth={"20%"}>체결시간</List>
+          <List Lwidth={"20%"}>체결가격</List>
+          <List Lwidth={"40%"}>체결량</List>
+          <List Lwidth={"20%"}>체결금액</List>
         </Header>
         {trade
           .slice(0)
           .reverse()
           .map((data, i) => (
             <Line key={i} sbgColor={i % 2 === 0 ? "white" : "#F9fafc"}>
-              <List>{data.trade_time}</List>
-              <List>{formatter(data.trade_price)}</List>
-              <List fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}>
+              <List Lwidth={"20%"}>
+                {dayjs(data.trade_timestamp).format("HH:mm:ss")}
+              </List>
+              <List Lwidth={"20%"}>{formatter(data.trade_price)}</List>
+              <List
+                Lwidth={"40%"}
+                fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}
+              >
                 {data.trade_volume.toFixed(8)}
               </List>
-              <List>
+              <List Lwidth={"20%"}>
                 {formatter(Math.round(data.trade_volume * data.trade_price))}
               </List>
             </Line>
@@ -49,7 +65,7 @@ const TradeContainer = styled.div`
   width: 87%;
   padding: 15px 15px;
   max-width: 420px; // padding 15 없음
-  height: 320px;
+  height: 620px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -76,10 +92,9 @@ const List = styled.div`
   font-size: 13px;
   text-align: center;
   color: ${(props) => props.fontColor};
-
   display: flex;
   justify-content: flex-start;
   font-weight: 300;
-  width: 100%;
+  width: ${(props) => (props.Lwidth ? props.Lwidth : "25%")};
 `;
 export default Trade;

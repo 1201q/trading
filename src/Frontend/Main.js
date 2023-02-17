@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Trade from "./Trade";
 // import Chart from "./Chart";
 import axios from "axios";
@@ -7,8 +7,11 @@ import CoinInfo from "./CoinInfo";
 import LineChart from "./LineChart";
 import dayjs from "dayjs";
 import BongChart from "./BongChart";
+import { useParams } from "react-router-dom";
 
 const Main = () => {
+  let { param_coincode } = useParams();
+
   const [price, setPrice] = useState(0); // 가격
   const [changePrice, setChangePrice] = useState([]); // [어제 종가, 현재 등락율]
   const [morePriceInfo, setMorePriceInfo] = useState([]);
@@ -19,40 +22,61 @@ const Main = () => {
   //
   const [trade, setTrade] = useState([]); //
 
-  let testCoinCode = "KRW-BTC";
-  let arr = [];
-
-  // const [dayCandle, setDayCandle] = useState([]);
   const [candle, setCandle] = useState([]);
+
+  const [candleData, setCandleData] = useState(0); // 봉차트 테스트
+  const [volume, setVolume] = useState(0);
+
+  const [coinCode, setCoinCode] = useState(
+    !param_coincode ? "KRW-BTC" : param_coincode
+  );
+
+  // websocket
+  const wsURL = "wss://api.upbit.com/websocket/v1";
+  const wsPrice = useRef(null);
+  const wsOrderbook = useRef(null);
+  const wsTrade = useRef(null);
+
+  ///
+
   // candle
   const axiosOptions = {
     method: "GET",
     url: "https://api.upbit.com/v1/candles/days",
     // url: "https://api.upbit.com/v1/candles/minutes/10",
     params: {
-      market: testCoinCode,
+      market: coinCode,
       // count: "145",
       count: "200",
     },
     headers: { accept: "application/json" },
   };
+  let arr = [];
 
   useEffect(() => {
     getPrice();
     getOrderbook();
     getTrade();
     getCandle();
-  }, []);
+  }, [coinCode]);
 
+  //웹소켓
   function getPrice() {
+    if (wsPrice.current !== null) {
+      if (wsPrice.current.readyState === 1) {
+        wsPrice.current.close();
+        console.log("check");
+      }
+    }
+
     try {
-      const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
-      ws.onopen = () => {
-        ws.send(
-          `[{"ticket" : "2"}, {"type" : "ticker","codes": [${testCoinCode}]}]`
+      wsPrice.current = new WebSocket(wsURL);
+      wsPrice.current.onopen = () => {
+        wsPrice.current.send(
+          `[{"ticket" : "2"}, {"type" : "ticker","codes": [${coinCode}]}]`
         );
       };
-      ws.onmessage = async (e) => {
+      wsPrice.current.onmessage = async (e) => {
         const { data } = e;
         const text = await new Response(data).json();
         setPrice(text.trade_price);
@@ -77,14 +101,21 @@ const Main = () => {
   }
 
   function getOrderbook() {
+    if (wsOrderbook.current !== null) {
+      if (wsOrderbook.current.readyState === 1) {
+        wsOrderbook.current.close();
+        console.log("check");
+      }
+    }
+
     try {
-      const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
-      ws.onopen = () => {
-        ws.send(
-          `[{"ticket":"3"},{"type":"orderbook","codes": [${testCoinCode}]}]`
+      wsOrderbook.current = new WebSocket(wsURL);
+      wsOrderbook.current.onopen = () => {
+        wsOrderbook.current.send(
+          `[{"ticket":"3"},{"type":"orderbook","codes": [${coinCode}]}]`
         );
       };
-      ws.onmessage = async (e) => {
+      wsOrderbook.current.onmessage = async (e) => {
         const { data } = e;
         const text = await new Response(data).json();
 
@@ -109,15 +140,24 @@ const Main = () => {
   }
 
   function getTrade() {
+    if (wsTrade.current !== null) {
+      if (wsTrade.current.readyState === 1) {
+        wsTrade.current.close();
+        console.log("check");
+      }
+    }
     try {
-      const ws = new WebSocket("wss://api.upbit.com/websocket/v1");
-      ws.onopen = () => {
-        ws.send(`[{"ticket":"4"},{"type":"trade","codes": [${testCoinCode}]}]`);
+      wsTrade.current = new WebSocket(wsURL);
+      wsTrade.current.onopen = () => {
+        wsTrade.current.send(
+          `[{"ticket":"4"},{"type":"trade","codes": [${coinCode}]}]`
+        );
       };
-      ws.onmessage = async (e) => {
+      wsTrade.current.onmessage = async (e) => {
         const { data } = e;
         const text = await new Response(data).json();
-        if (arr.length >= 20) {
+
+        if (arr.length >= 50) {
           arr.shift();
         }
         arr.push(text);
@@ -135,40 +175,8 @@ const Main = () => {
       .then((res) => res.data);
     console.log(fetch);
     dayCandle(fetch);
-    // minCandle(fetch);
   }
 
-  function minCandle(fetch) {
-    let newArr = [];
-    let today = dayjs().format("YYYY-MM-DD");
-    // 오늘 10분봉
-    fetch.filter((data) => {
-      if (data.candle_date_time_utc.includes(today)) {
-        newArr.push({
-          value: data.trade_price,
-          time: dayjs(data.candle_date_time_utc).add(18, "h").unix(),
-        });
-      } else {
-        return;
-      }
-    });
-
-    let length = newArr.length;
-    newArr = newArr.reverse();
-
-    for (let i = length; i <= 144; i++) {
-      newArr.push({
-        time: dayjs
-          .unix(newArr[0].time)
-          .add(10 * i, "minute")
-          .unix(),
-      });
-    }
-    setCandle(newArr);
-  }
-
-  const [test, setTest] = useState(0); // 봉차트 테스트
-  const [volume, setVolume] = useState(0);
   function dayCandle(fetch) {
     let arr = [];
     let vol = [];
@@ -192,72 +200,21 @@ const Main = () => {
             : "rgba(225,35,67, 0.3)",
       };
     });
-    console.log(arr);
-    console.log(vol);
     setVolume(vol);
-    setTest(arr);
-  }
-
-  function backup() {
-    async function getCandle() {
-      let fetch = await axios
-        .get(axiosOptions.url, axiosOptions)
-        .then((res) => res.data);
-      let newArr = [];
-      let today = dayjs().format("YYYY-MM-DD");
-
-      console.log(fetch);
-
-      // 오늘 10분봉
-      fetch.filter((data) => {
-        if (data.candle_date_time_utc.includes(today)) {
-          newArr.push({
-            value: data.trade_price,
-            time: dayjs(data.candle_date_time_utc).add(18, "h").unix(),
-            utc: data.candle_date_time_utc,
-            kst: data.candle_date_time_kst,
-          });
-        } else {
-          return;
-        }
-      });
-      console.log(newArr);
-
-      let length = newArr.length;
-      newArr = newArr.reverse();
-
-      for (let i = 1; i <= 145 - length; i++) {
-        newArr.push({
-          time: dayjs(newArr[length - 1].utc)
-            .add(10 * i, "minute")
-            .add(18, "h")
-            .unix(),
-          utc: dayjs(newArr[length - 1].utc)
-            .add(10 * i, "minute")
-            .format(""),
-          kst: dayjs(newArr[length - 1].utc)
-            .add(10 * i, "minute")
-            .add(9, "h")
-            .format(""),
-        });
-      }
-
-      // console.log(newArr);
-      let backup = newArr;
-      setCandle(newArr);
-    }
+    setCandleData(arr);
   }
 
   return (
     <div>
       <CoinInfo
+        coinCode={coinCode}
         price={price}
         changePrice={changePrice}
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
 
-      <BongChart test={test} price={price} volume={volume} />
+      <BongChart candleData={candleData} price={price} volume={volume} />
       <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}

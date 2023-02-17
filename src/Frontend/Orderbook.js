@@ -27,18 +27,13 @@ const Orderbook = ({
     } else if (n < 0) {
       return `${n.toFixed(2)}%`;
     } else if (n === 0) {
-      return ` ${n.toFixed(2)}%`;
+      return ` +${n.toFixed(2)}%`;
     }
   };
 
   return (
     <Center>
       <OrderbookContainer>
-        {/* <Header>
-          <HogaList>{numberFormatter(orderbookSumInfo[1])}</HogaList>
-          <HogaList>호가</HogaList>
-          <HogaList>{numberFormatter(orderbookSumInfo[2])}</HogaList>
-        </Header> */}
         {orderbook.map((data, i) => (
           <Hoga
             key={data[0]}
@@ -65,8 +60,7 @@ const Orderbook = ({
               <p>{numberFormatter(data[1])}</p>
             </HogaBar>
             <HogaList border={data[0] === price && "0 0 0 1.5px #343A40 inset"}>
-              {" "}
-              <HogaChangePrice
+              <HogaChangePercent
                 fontColor={
                   ((data[0] - changePrice[0]) / changePrice[0]) * 100 < 0
                     ? "#3c87e5"
@@ -78,7 +72,7 @@ const Orderbook = ({
                 {percentageFormatter(
                   ((data[0] - changePrice[0]) / changePrice[0]) * 100
                 )}
-              </HogaChangePrice>
+              </HogaChangePercent>
               <HogaPrice
                 fontColor={
                   ((data[0] - changePrice[0]) / changePrice[0]) * 100 < 0
@@ -127,14 +121,6 @@ const OrderbookContainer = styled.div`
   }
 `;
 
-const Header = styled.div`
-  width: 100%;
-  justify-content: space-around;
-  display: flex;
-  background-color: ${(props) => props.bgColor};
-  margin-bottom: 5px;
-`;
-
 const Hoga = styled.div`
   width: 100%;
   display: flex;
@@ -166,31 +152,40 @@ const HogaBar = styled.div`
     color: #60656b;
     font-size: 13px;
   }
+
+  @media screen and (max-width: 500px) {
+    width: 60%;
+  }
 `;
 
 const HogaList = styled.div`
+  width: 30%;
   height: 30px;
   display: flex;
   justify-content: space-between;
   margin-bottom: 2px;
-  padding: 0px 4px;
   background-color: ${(props) => props.bgColor};
   border-radius: 5px;
   box-shadow: ${(props) => props.border};
   color: #9e9e9e;
+
+  @media screen and (max-width: 500px) {
+    width: 40%;
+  }
 `;
 
 const HogaPrice = styled.div`
+  text-align: justify;
   display: flex;
   justify-content: flex-end;
   align-items: center;
+  margin-left: 5px;
   font-size: 16px;
   font-weight: 500;
-  margin-left: 10px;
   color: ${(props) => props.fontColor};
 `;
 
-const HogaChangePrice = styled.div`
+const HogaChangePercent = styled.div`
   display: flex;
   align-items: center;
   font-size: 11px;
