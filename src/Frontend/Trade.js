@@ -21,8 +21,8 @@ const Trade = ({ trade }) => {
         <Header>
           <List Lwidth={"20%"}>체결시간</List>
           <List Lwidth={"20%"}>체결가격</List>
-          <List Lwidth={"40%"}>체결량</List>
-          <List Lwidth={"20%"}>체결금액</List>
+          <List Lwidth={"35%"}>체결량</List>
+          <List Lwidth={"25%"}>체결금액</List>
         </Header>
         {trade
           .slice(0)
@@ -34,12 +34,12 @@ const Trade = ({ trade }) => {
               </List>
               <List Lwidth={"20%"}>{formatter(data.trade_price)}</List>
               <List
-                Lwidth={"40%"}
+                Lwidth={"35%"}
                 fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}
               >
                 {data.trade_volume.toFixed(8)}
               </List>
-              <List Lwidth={"20%"}>
+              <List Lwidth={"25%"}>
                 {formatter(Math.round(data.trade_volume * data.trade_price))}
               </List>
             </Line>
