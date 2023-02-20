@@ -238,10 +238,10 @@ const Nav = styled.div`
   justify-content: center;
   width: 100%;
   position: fixed;
-  bottom: 5px;
+  bottom: 15px;
   left: 0;
   right: 0;
-  height: 45px;
+  height: 50px;
 `;
 
 const NN = styled.div`
@@ -257,7 +257,7 @@ const Btn = styled.div`
   align-items: center;
   width: 100%;
   margin: 3px 8px;
-  border-radius: 10px;
+  border-radius: 11px;
   font-size: 17px;
   color: white;
   background-color: ${(props) => props.bgColor};
