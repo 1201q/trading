@@ -241,13 +241,14 @@ const Nav = styled.div`
   bottom: 15px;
   left: 0;
   right: 0;
-  height: 50px;
+  height: 55px;
 `;
 
 const NN = styled.div`
   display: flex;
-  border: 1px solid #eeeeee;
+  border: mone;
   width: 450px;
+  margin: 0px 15px;
 `;
 
 const Btn = styled.div`
@@ -256,8 +257,8 @@ const Btn = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  margin: 3px 8px;
-  border-radius: 11px;
+  margin: 5px;
+  border-radius: 12px;
   font-size: 17px;
   color: white;
   background-color: ${(props) => props.bgColor};
