@@ -8,7 +8,6 @@ import LineChart from "./LineChart";
 import dayjs from "dayjs";
 import BongChart from "./BongChart";
 import { useParams } from "react-router-dom";
-import styled from "styled-components";
 
 const Main = () => {
   let { param_coincode } = useParams();
@@ -223,44 +222,8 @@ const Main = () => {
         setOrderPrice={setOrderPrice}
       />
       <Trade trade={trade} />
-      <Nav>
-        <NN>
-          <Btn bgColor="#E12343">매수</Btn>
-          <Btn bgColor="#3182f6">매도</Btn>
-        </NN>
-      </Nav>
     </div>
   );
 };
-
-const Nav = styled.div`
-  display: flex;
-  justify-content: center;
-  width: 100%;
-  position: fixed;
-  bottom: 5px;
-  left: 0;
-  right: 0;
-  height: 45px;
-`;
-
-const NN = styled.div`
-  display: flex;
-  border: 1px solid #eeeeee;
-  width: 450px;
-`;
-
-const Btn = styled.div`
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 3px 8px;
-  border-radius: 10px;
-  font-size: 17px;
-  color: white;
-  background-color: ${(props) => props.bgColor};
-`;
 
 export default Main;
