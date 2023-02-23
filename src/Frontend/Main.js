@@ -33,8 +33,9 @@ const Main = () => {
   );
 
   // visible
+  const [infoVisible, setInfoVisible] = useState(true);
   const [orderbookVisible, setOrderbookVisible] = useState(true);
-  const [tradeVisible, setTradeVisible] = useState(true);
+  const [tradeVisible, setTradeVisible] = useState(false);
   const [chartVisible, setChartVisible] = useState(true);
 
   // websocket
@@ -210,13 +211,15 @@ const Main = () => {
 
   return (
     <div>
-      <CoinInfo
-        coinCode={coinCode}
-        price={price}
-        changePrice={changePrice}
-        morePriceInfo={morePriceInfo}
-        candle={candle}
-      />
+      {infoVisible && (
+        <CoinInfo
+          coinCode={coinCode}
+          price={price}
+          changePrice={changePrice}
+          morePriceInfo={morePriceInfo}
+          candle={candle}
+        />
+      )}
       {chartVisible && (
         <BongChart candleData={candleData} price={price} volume={volume} />
       )}
@@ -227,6 +230,7 @@ const Main = () => {
               setTradeVisible(true);
               setChartVisible(true);
               setOrderbookVisible(true);
+              setInfoVisible(true);
             }}
           >
             메인
@@ -235,6 +239,7 @@ const Main = () => {
             onClick={() => {
               setChartVisible(false);
               setTradeVisible(false);
+              setInfoVisible(false);
               setOrderbookVisible(true);
             }}
           >
@@ -244,6 +249,7 @@ const Main = () => {
             onClick={() => {
               setChartVisible(false);
               setOrderbookVisible(false);
+              setInfoVisible(false);
               setTradeVisible(true);
             }}
           >
@@ -282,6 +288,7 @@ const Main = () => {
 };
 
 const Nav = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
   position: fixed;
@@ -297,7 +304,8 @@ const NN = styled.div`
   background-color: white;
   border: mone;
   width: 450px;
-  margin: 0px 15px 0px 15px;
+  margin: 0px 0px 0px 0px;
+  padding: 0px 10px;
   padding-bottom: 15px;
 `;
 
@@ -331,7 +339,7 @@ const Container = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-
+  border-radius: 10px;
   button {
     display: flex;
     padding: 0px 10px;
