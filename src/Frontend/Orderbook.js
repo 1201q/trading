@@ -7,6 +7,7 @@ const Orderbook = ({
   orderbookSumInfo,
   price,
   changePrice,
+  orderPrice,
   setOrderPrice,
 }) => {
   const numberFormatter = (n) => {
@@ -38,8 +39,14 @@ const Orderbook = ({
           <Hoga
             key={data[0]}
             onClick={() => {
-              setOrderPrice(data[0]);
+              if (data[0] !== orderPrice) {
+                setOrderPrice(data[0]);
+              } else {
+                setOrderPrice(null);
+              }
             }}
+            selectBgColor={data[0] === orderPrice ? "#e9ecf1" : ""}
+            selectOpacity={data[0] === orderPrice ? "1" : "1"}
           >
             <HogaBar>
               {i > 14 ? (
@@ -109,7 +116,6 @@ const OrderbookContainer = styled.div`
   border: 1px solid #eeeeee;
   width: 87%;
   max-width: 420px;
-  height: 620px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
@@ -124,10 +130,12 @@ const OrderbookContainer = styled.div`
 const Hoga = styled.div`
   width: 100%;
   display: flex;
+  border-radius: 5px;
   justify-content: space-between;
+  background-color: ${(props) => props.selectBgColor};
+
   &:hover {
     cursor: pointer;
-    opacity: 0.7;
     background-color: #e9ecf1;
   }
 `;
@@ -150,7 +158,7 @@ const HogaBar = styled.div`
     position: absolute;
     z-index: 2;
     color: #60656b;
-    font-size: 13px;
+    font-size: 12px;
   }
 
   @media screen and (max-width: 500px) {

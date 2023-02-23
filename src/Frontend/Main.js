@@ -18,7 +18,7 @@ const Main = () => {
   const [morePriceInfo, setMorePriceInfo] = useState([]);
   const [orderbook, setOrderbook] = useState([]); // 호가 배열
   const [orderbookSumInfo, setOrderbookSumInfo] = useState([]); // [timestamp, sum, sum]
-  const [orderPrice, setOrderPrice] = useState(0); // 내가 호가창에서 선택한 가격
+  const [orderPrice, setOrderPrice] = useState(null); // 내가 호가창에서 선택한 가격
 
   //
   const [trade, setTrade] = useState([]); //
@@ -32,13 +32,16 @@ const Main = () => {
     !param_coincode ? "KRW-BTC" : param_coincode
   );
 
+  // visible
+  const [orderbookVisible, setOrderbookVisible] = useState(true);
+  const [tradeVisible, setTradeVisible] = useState(true);
+  const [chartVisible, setChartVisible] = useState(true);
+
   // websocket
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
   const wsOrderbook = useRef(null);
   const wsTrade = useRef(null);
-
-  ///
 
   // candle
   const axiosOptions = {
@@ -174,10 +177,11 @@ const Main = () => {
     let fetch = await axios
       .get(axiosOptions.url, axiosOptions)
       .then((res) => res.data);
-    dayCandle(fetch);
+    getDayCandle(fetch);
+    console.log(fetch);
   }
 
-  function dayCandle(fetch) {
+  function getDayCandle(fetch) {
     let arr = [];
     let vol = [];
     fetch.reverse().map((data, i) => {
@@ -213,17 +217,61 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
-
-      <BongChart candleData={candleData} price={price} volume={volume} />
-      <Orderbook
-        orderbook={orderbook}
-        orderbookSumInfo={orderbookSumInfo}
-        price={price}
-        changePrice={changePrice}
-        setOrderPrice={setOrderPrice}
-      />
-      <Trade trade={trade} />
-      <Nav>
+      {chartVisible && (
+        <BongChart candleData={candleData} price={price} volume={volume} />
+      )}
+      <Center>
+        <Container>
+          <button
+            onClick={() => {
+              setTradeVisible(true);
+              setChartVisible(true);
+              setOrderbookVisible(true);
+            }}
+          >
+            메인
+          </button>
+          <button
+            onClick={() => {
+              setChartVisible(false);
+              setTradeVisible(false);
+              setOrderbookVisible(true);
+            }}
+          >
+            호가
+          </button>
+          <button
+            onClick={() => {
+              setChartVisible(false);
+              setOrderbookVisible(false);
+              setTradeVisible(true);
+            }}
+          >
+            체결
+          </button>
+          <button
+            onClick={() => {
+              setTradeVisible(false);
+              setChartVisible(false);
+              setOrderbookVisible(false);
+            }}
+          >
+            지갑
+          </button>
+        </Container>
+      </Center>
+      {orderbookVisible && (
+        <Orderbook
+          orderbook={orderbook}
+          orderbookSumInfo={orderbookSumInfo}
+          price={price}
+          changePrice={changePrice}
+          orderPrice={orderPrice}
+          setOrderPrice={setOrderPrice}
+        />
+      )}
+      {tradeVisible && <Trade trade={trade} />}
+      <Nav style={{ display: !orderPrice && "none" }}>
         <NN>
           <Btn bgColor="#E12343">매수</Btn>
           <Btn bgColor="#3182f6">매도</Btn>
@@ -236,19 +284,21 @@ const Main = () => {
 const Nav = styled.div`
   display: flex;
   justify-content: center;
-  width: 100%;
   position: fixed;
-  bottom: 15px;
+  bottom: 0px;
   left: 0;
   right: 0;
-  height: 55px;
+  z-index: 3;
+  height: 70px;
 `;
 
 const NN = styled.div`
   display: flex;
+  background-color: white;
   border: mone;
   width: 450px;
-  margin: 0px 15px;
+  margin: 0px 15px 0px 15px;
+  padding-bottom: 15px;
 `;
 
 const Btn = styled.div`
@@ -262,6 +312,37 @@ const Btn = styled.div`
   font-size: 17px;
   color: white;
   background-color: ${(props) => props.bgColor};
+`;
+
+const Center = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Container = styled.div`
+  margin: 0px 0px;
+  padding: 10px 15px 10px 15px;
+  margin-top: 20px;
+  background-color: #093687;
+  width: 87%;
+  max-width: 420px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  button {
+    display: flex;
+    padding: 0px 10px;
+    border-radius: 5px;
+    border: none;
+    color: #093687;
+    font-size: 14px;
+    font-weight: 600;
+    background-color: white;
+    cursor: pointer;
+  }
 `;
 
 export default Main;

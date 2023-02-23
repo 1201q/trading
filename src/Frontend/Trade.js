@@ -61,7 +61,6 @@ const TradeContainer = styled.div`
   width: 87%;
   padding: 15px 15px;
   max-width: 420px; // padding 15 없음
-  height: 620px;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
