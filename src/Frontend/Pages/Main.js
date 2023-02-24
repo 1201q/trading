@@ -1,14 +1,14 @@
 import React, { useEffect, useState, useRef } from "react";
-import Trade from "./Trade";
-// import Chart from "./Chart";
+import Trade from "../Components/Trade";
 import axios from "axios";
-import Orderbook from "./Orderbook";
-import CoinInfo from "./CoinInfo";
-import LineChart from "./LineChart";
+import Orderbook from "../Components/Orderbook";
+import CoinInfo from "../Components/CoinInfo";
 import dayjs from "dayjs";
-import BongChart from "./BongChart";
+import BongChart from "../Components/BongChart";
+import NavBar from "../Components/NavBar";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import Header from "../Components/Header";
 
 const Main = () => {
   let { param_coincode } = useParams();
@@ -31,12 +31,6 @@ const Main = () => {
   const [coinCode, setCoinCode] = useState(
     !param_coincode ? "KRW-BTC" : param_coincode
   );
-
-  // visible
-  const [infoVisible, setInfoVisible] = useState(true);
-  const [orderbookVisible, setOrderbookVisible] = useState(true);
-  const [tradeVisible, setTradeVisible] = useState(false);
-  const [chartVisible, setChartVisible] = useState(true);
 
   // websocket
   const wsURL = "wss://api.upbit.com/websocket/v1";
@@ -210,147 +204,44 @@ const Main = () => {
   }
 
   return (
-    <div>
-      {infoVisible && (
-        <CoinInfo
-          coinCode={coinCode}
-          price={price}
-          changePrice={changePrice}
-          morePriceInfo={morePriceInfo}
-          candle={candle}
-        />
-      )}
-      {chartVisible && (
-        <BongChart candleData={candleData} price={price} volume={volume} />
-      )}
-      <Center>
-        <Container>
-          <button
-            onClick={() => {
-              setTradeVisible(true);
-              setChartVisible(true);
-              setOrderbookVisible(true);
-              setInfoVisible(true);
-            }}
-          >
-            메인
-          </button>
-          <button
-            onClick={() => {
-              setChartVisible(false);
-              setTradeVisible(false);
-              setInfoVisible(false);
-              setOrderbookVisible(true);
-            }}
-          >
-            호가
-          </button>
-          <button
-            onClick={() => {
-              setChartVisible(false);
-              setOrderbookVisible(false);
-              setInfoVisible(false);
-              setTradeVisible(true);
-            }}
-          >
-            체결
-          </button>
-          <button
-            onClick={() => {
-              setTradeVisible(false);
-              setChartVisible(false);
-              setOrderbookVisible(false);
-            }}
-          >
-            지갑
-          </button>
-        </Container>
-      </Center>
-      {orderbookVisible && (
-        <Orderbook
-          orderbook={orderbook}
-          orderbookSumInfo={orderbookSumInfo}
-          price={price}
-          changePrice={changePrice}
-          orderPrice={orderPrice}
-          setOrderPrice={setOrderPrice}
-        />
-      )}
-      {tradeVisible && <Trade trade={trade} />}
-      <Nav style={{ display: !orderPrice && "none" }}>
-        <NN>
-          <Btn bgColor="#E12343">매수</Btn>
-          <Btn bgColor="#3182f6">매도</Btn>
-        </NN>
-      </Nav>
-    </div>
+    <Center>
+      <Stop>111</Stop>
+      <CoinInfo
+        coinCode={coinCode}
+        price={price}
+        changePrice={changePrice}
+        morePriceInfo={morePriceInfo}
+        candle={candle}
+      />
+
+      <BongChart candleData={candleData} price={price} volume={volume} />
+      <Header />
+      <Orderbook
+        orderbook={orderbook}
+        orderbookSumInfo={orderbookSumInfo}
+        price={price}
+        changePrice={changePrice}
+        orderPrice={orderPrice}
+        setOrderPrice={setOrderPrice}
+      />
+      <Trade trade={trade} />
+      <NavBar orderPrice={orderPrice} />
+    </Center>
   );
 };
 
-const Nav = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  position: fixed;
-  bottom: 0px;
-  left: 0;
-  right: 0;
-  z-index: 3;
-  height: 70px;
-`;
-
-const NN = styled.div`
-  display: flex;
-  background-color: white;
-  border: mone;
-  width: 450px;
-  margin: 0px 0px 0px 0px;
-  padding: 0px 10px;
-  padding-bottom: 15px;
-`;
-
-const Btn = styled.div`
-  cursor: pointer;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  margin: 5px;
-  border-radius: 12px;
-  font-size: 17px;
-  color: white;
-  background-color: ${(props) => props.bgColor};
-`;
-
 const Center = styled.div`
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  min-width: 440px;
 `;
 
-const Container = styled.div`
-  margin: 0px 0px;
-  padding: 10px 15px 10px 15px;
-  margin-top: 20px;
-  background-color: #093687;
-  width: 87%;
-  max-width: 420px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-radius: 10px;
-  button {
-    display: flex;
-    padding: 0px 10px;
-    border-radius: 5px;
-    border: none;
-    color: #093687;
-    font-size: 14px;
-    font-weight: 600;
-    background-color: white;
-    cursor: pointer;
-  }
+const Stop = styled.div`
+  width: 100%;
+  position: fixed;
+
+  height: 40px;
+  background-color: red;
+  z-index: 8;
 `;
 
 export default Main;

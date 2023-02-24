@@ -1,12 +1,7 @@
 import dayjs from "dayjs";
-import { useEffect } from "react";
 import styled from "styled-components";
 
 const Trade = ({ trade }) => {
-  useEffect(() => {
-    console.log();
-  }, [trade]);
-
   const formatter = (n) => {
     return n.toLocaleString();
   };

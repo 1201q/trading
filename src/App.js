@@ -1,5 +1,5 @@
-import Main from "./Frontend/Main";
-import List from "./Frontend/List";
+import Main from "./Frontend/Pages/Main";
+import List from "./Frontend/Pages/List";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 // Main

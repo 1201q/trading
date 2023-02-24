@@ -1,9 +1,6 @@
 import styled from "styled-components";
-import LineChart from "./LineChart";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCaretUp, faCaretDown } from "@fortawesome/free-solid-svg-icons";
 
-const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo, candle }) => {
+const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo }) => {
   const numberFormatter = (n) => {
     let newNumber = n;
     if (n >= 1 && n < 100) {

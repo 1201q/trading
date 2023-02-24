@@ -1,9 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { createChart, PriceScaleMode } from "lightweight-charts";
+import { createChart } from "lightweight-charts";
 import styled from "styled-components";
-import dayjs from "dayjs";
 
-const BongChart = ({ price, candleData, volume }) => {
+const BongChart = ({ price, candleData, volume, chartVisible }) => {
   const chartContainerRef = useRef(null);
   const [chart, setChart] = useState(null);
   const [candleStickSeries, setCandleStickSeries] = useState(null);
@@ -67,7 +66,7 @@ const BongChart = ({ price, candleData, volume }) => {
       setVolumeSeries(volumeSeriesObj);
       setCandleStickSeries(candleStickSeriesObj);
     }
-  }, []);
+  }, [chartVisible]);
 
   useEffect(() => {
     if (candleData && volume && candleStickSeries && volumeSeries) {
