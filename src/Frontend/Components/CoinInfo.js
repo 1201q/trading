@@ -84,7 +84,6 @@ const Center = styled.div`
 const CoinInfoContainer = styled.div`
   margin: 0px 0px;
   padding: 15px 15px 15px 15px;
-  margin-top: 10px;
   border-radius: 10px;
   background-color: white;
   border: 1px solid #eeeeee;

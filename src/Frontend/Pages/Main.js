@@ -205,7 +205,6 @@ const Main = () => {
 
   return (
     <Center>
-      <Stop>111</Stop>
       <CoinInfo
         coinCode={coinCode}
         price={price}
@@ -213,7 +212,6 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
-
       <BongChart candleData={candleData} price={price} volume={volume} />
       <Header />
       <Orderbook
@@ -232,16 +230,8 @@ const Main = () => {
 
 const Center = styled.div`
   width: 100%;
-  min-width: 440px;
-`;
-
-const Stop = styled.div`
-  width: 100%;
-  position: fixed;
-
-  height: 40px;
-  background-color: red;
-  z-index: 8;
+  height: 100%;
+  min-width: 430px;
 `;
 
 export default Main;

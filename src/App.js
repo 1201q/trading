@@ -1,7 +1,8 @@
 import Main from "./Frontend/Pages/Main";
 import List from "./Frontend/Pages/List";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-
+import styled from "styled-components";
+import { useEffect, useRef } from "react";
 // Main
 function App() {
   return (
