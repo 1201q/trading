@@ -96,31 +96,27 @@ const BongChart = ({ price, candleData, volume, chartVisible }) => {
   }, [price]);
 
   return (
-    <Center>
-      <CoinInfoContainer>
-        <Chart ref={chartContainerRef}></Chart>
-      </CoinInfoContainer>
-    </Center>
+    <CoinInfoContainer>
+      <Chart ref={chartContainerRef}></Chart>
+    </CoinInfoContainer>
   );
 };
 
-const Center = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
+// const Center = styled.div`
+//   width: 100%;
+//   display: flex;
+//   flex-direction: column;
+//   justify-content: center;
+//   align-items: center;
+// `;
 
 const CoinInfoContainer = styled.div`
   margin: 0px 0px 0px 0px;
-  padding: 15px 15px 5px 15px;
   margin-top: 20px;
   border-radius: 10px;
   background-color: white;
   border: 1px solid #eeeeee;
-  width: 87%;
-  max-width: 420px;
+  /* max-width: 420px; */
   height: 100%;
   display: flex;
   flex-direction: column;

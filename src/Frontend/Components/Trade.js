@@ -7,8 +7,8 @@ const Trade = ({ trade }) => {
   };
 
   return (
-    <Center>
-      <TradeContainer>
+    <TradeContainer>
+      <Padding>
         <Header>
           <List Lwidth={"20%"}>체결시간</List>
           <List Lwidth={"25%"}>체결가격</List>
@@ -35,31 +35,23 @@ const Trade = ({ trade }) => {
               </List>
             </Line>
           ))}
-      </TradeContainer>
-    </Center>
+      </Padding>
+    </TradeContainer>
   );
 };
 
-const Center = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const Padding = styled.div`
+  padding: 0px 20px;
 `;
 
 const TradeContainer = styled.div`
   margin: 20px 0px;
   border-radius: 10px;
   background-color: white;
-  border: 1px solid #eeeeee;
-  width: 87%;
-  padding: 15px 15px;
-  max-width: 420px; // padding 15 없음
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;
-  /* border: 1px solid black; */
 `;
 
 const Header = styled.div`

@@ -47,11 +47,10 @@ const Header = () => {
 };
 
 const He = styled.div`
-  width: 100%;
   background-color: bisque;
   z-index: 5;
   position: sticky;
-  height: 50px;
+  height: 20px;
   top: 0;
 `;
 

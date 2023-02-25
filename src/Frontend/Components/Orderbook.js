@@ -32,8 +32,8 @@ const Orderbook = ({
   };
 
   return (
-    <Center>
-      <OrderbookContainer>
+    <OrderbookContainer>
+      <Padding>
         {orderbook.map((data, i) => (
           <Hoga
             key={data[0]}
@@ -93,28 +93,20 @@ const Orderbook = ({
             </HogaList>
           </Hoga>
         ))}
-      </OrderbookContainer>
-    </Center>
+      </Padding>
+    </OrderbookContainer>
   );
 };
-
-const Center = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const Padding = styled.div`
+  padding: 0px 20px;
 `;
 
 const OrderbookContainer = styled.div`
   margin: 0px 0px;
-  padding: 10px 15px 15px 15px;
   margin-top: 20px;
   border-radius: 10px;
   background-color: white;
-  border: 1px solid #eeeeee;
-  width: 87%;
-  max-width: 420px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   overflow-y: auto;

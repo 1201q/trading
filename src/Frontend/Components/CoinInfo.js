@@ -24,8 +24,8 @@ const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo }) => {
   };
 
   return (
-    <Center>
-      <CoinInfoContainer>
+    <CoinInfoContainer>
+      <Padding>
         <Name>{coinCode}</Name>
         <Info
           fontColor={
@@ -68,30 +68,21 @@ const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo }) => {
           </div>
         </MoreInfo>
         {/* {candle.length > 1 ? <LineChart candle={candle} price={price} /> : ""} */}
-      </CoinInfoContainer>
-    </Center>
+      </Padding>
+    </CoinInfoContainer>
   );
 };
 
-const Center = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+const Padding = styled.div`
+  padding: 0px 20px;
 `;
 
 const CoinInfoContainer = styled.div`
-  margin: 0px 0px;
-  padding: 15px 15px 15px 15px;
+  margin-top: 20px;
   border-radius: 10px;
-  background-color: white;
-  border: 1px solid #eeeeee;
-  width: 87%;
-  max-width: 420px;
+  width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
+
   overflow-y: auto;
 `;
 
