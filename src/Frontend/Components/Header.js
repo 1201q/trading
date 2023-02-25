@@ -48,10 +48,9 @@ const Header = () => {
 
 const He = styled.div`
   width: 100%;
-  /* position: ${(props) => props.positionType}; */
   background-color: bisque;
   z-index: 5;
-  position: fixed;
+  position: sticky;
   height: 50px;
   top: 0;
 `;

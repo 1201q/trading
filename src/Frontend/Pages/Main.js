@@ -204,7 +204,7 @@ const Main = () => {
   }
 
   return (
-    <Center>
+    <div>
       <CoinInfo
         coinCode={coinCode}
         price={price}
@@ -224,14 +224,12 @@ const Main = () => {
       />
       <Trade trade={trade} />
       <NavBar orderPrice={orderPrice} />
-    </Center>
+    </div>
   );
 };
 
 const Center = styled.div`
-  width: 100%;
-  height: 100%;
-  min-width: 430px;
+  background-color: red;
 `;
 
 export default Main;
