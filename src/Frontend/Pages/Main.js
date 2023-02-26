@@ -8,6 +8,7 @@ import BongChart from "../Components/BongChart";
 import NavBar from "../Components/NavBar";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import Menu from "../Components/Menu";
 import Header from "../Components/Header";
 
 const Main = () => {
@@ -205,6 +206,7 @@ const Main = () => {
 
   return (
     <Center>
+      <Header coinCode={coinCode} price={price} changePrice={changePrice} />
       <CoinInfo
         coinCode={coinCode}
         price={price}
@@ -212,8 +214,9 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
+      <Menu />
       <BongChart candleData={candleData} price={price} volume={volume} />
-      <Header />
+
       <Orderbook
         orderbook={orderbook}
         orderbookSumInfo={orderbookSumInfo}
@@ -228,9 +231,19 @@ const Main = () => {
   );
 };
 
+const TT = styled.div`
+  position: fixed;
+  background-color: red;
+
+  height: 40px;
+  max-width: 450px;
+  width: 100vw;
+  z-index: 10; //test
+  top: 0;
+`;
+
 const Center = styled.div`
   max-width: 450px;
-
   width: 100vw;
 `;
 

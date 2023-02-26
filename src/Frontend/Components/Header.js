@@ -1,57 +1,84 @@
-import { useEffect, useRef } from "react";
-import styled from "styled-components";
+import { useState, useEffect, useRef } from "react";
+import styled, { keyframes, css } from "styled-components";
 
-const Header = () => {
-  const headerRef = useRef(null);
+const Header = ({ price, coinCode, changePrice }) => {
+  const numberFormatter = (n) => {
+    let newNumber = n;
+    if (n >= 1 && n < 100) {
+      newNumber = n.toFixed(2).toLocaleString();
+    } else if (n >= 100) {
+      newNumber = Math.floor(n).toLocaleString();
+    } else if (n < 1) {
+      newNumber = n.toFixed(4).toLocaleString();
+    }
+    return newNumber;
+  };
 
-  // useEffect(() => {
-  //   const handleScroll = () => {
-  //     const yPos = headerRef.current.getBoundingClientRect().top;
-  //     const isMobile = window.innerWidth < 768;
-  //     let top = 0;
+  const percentageFormatter = (n) => {
+    if (n > 0) {
+      return `+${n.toFixed(2)}%`;
+    } else if (n < 0) {
+      return `${n.toFixed(2)}%`;
+    } else if (n === 0) {
+      return ` ${n.toFixed(2)}%`;
+    }
+  };
 
-  //     if (isMobile) {
-  //       // 모바일
-  //       const topOffset = window.pageYOffset; // 제자리에서 얼마나 y축으로 스크롤됐나
-  //       // console.log(yPos); //
-  //       if (topOffset < 0) {
-  //         // 헤더에 붙음
-  //         headerRef.current.style.position = "fixed";
-  //         headerRef.current.style.top = `${topOffset + 40}px`;
-  //       } else {
-  //         // 헤더에 떨어져 있음
-  //         headerRef.current.style.position = "sticky";
-  //       }
-  //     } else {
-  //       // pc
-  //       headerRef.current.style.position = "sticky";
-  //       headerRef.current.style.top = "40px";
-  //     }
-
-  //     // if (40 > yPos) {
-  //     //   headerRef.current.style.position = "fixed";
-  //     //   headerRef.current.style.top = "40px";
-  //     // } else {
-  //     //   headerRef.current.style.position = "sticky";
-  //     // }
-  //   };
-
-  //   window.addEventListener("scroll", handleScroll);
-
-  //   return () => {
-  //     window.addEventListener("scroll", handleScroll);
-  //   };
-  // }, []);
-
-  return <He ref={headerRef}>11111111111111</He>;
+  return (
+    <HeaderContainer>
+      <Padding>
+        <CoinName>{coinCode}</CoinName>
+        <CoinPrice
+          fontColor={
+            changePrice[3] === "RISE"
+              ? "#CD614D"
+              : changePrice[3] === "FALL"
+              ? "#3c87e5"
+              : "#424242"
+          }
+        >
+          {`${numberFormatter(price)}원`}{" "}
+          {percentageFormatter(changePrice[1] * 100)}
+        </CoinPrice>
+      </Padding>
+    </HeaderContainer>
+  );
 };
 
-const He = styled.div`
-  background-color: bisque;
-  z-index: 5;
-  position: sticky;
-  height: 20px;
+const Padding = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  p {
+    padding: 0;
+    margin: 0;
+  }
+`;
+
+const HeaderContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  background-color: white;
+  max-width: 450px;
+  width: 100vw;
+  z-index: 10; //test
   top: 0;
+  height: 40px;
+`;
+
+const CoinName = styled.p`
+  font-size: 10px;
+  font-weight: 400;
+  color: #60656b;
+`;
+
+const CoinPrice = styled.p`
+  font-size: 11px;
+  font-weight: 500;
+  color: ${(props) => props.fontColor};
 `;
 
 export default Header;

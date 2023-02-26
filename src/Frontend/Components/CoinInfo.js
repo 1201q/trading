@@ -78,7 +78,8 @@ const Padding = styled.div`
 `;
 
 const CoinInfoContainer = styled.div`
-  margin-top: 20px;
+  margin-top: 50px;
+  margin-bottom: 10px;
   border-radius: 10px;
   width: 100%;
   height: 100%;

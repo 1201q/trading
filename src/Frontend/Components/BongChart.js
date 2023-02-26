@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { createChart } from "lightweight-charts";
 import styled from "styled-components";
 
-const BongChart = ({ price, candleData, volume, chartVisible }) => {
+const BongChart = ({ price, candleData, volume }) => {
   const chartContainerRef = useRef(null);
   const [chart, setChart] = useState(null);
   const [candleStickSeries, setCandleStickSeries] = useState(null);
@@ -11,7 +11,7 @@ const BongChart = ({ price, candleData, volume, chartVisible }) => {
   useEffect(() => {
     if (chartContainerRef.current) {
       const chartObj = createChart(chartContainerRef.current, {
-        height: 250,
+        height: 280,
       });
 
       const candleStickSeriesObj = chartObj.addCandlestickSeries({
@@ -23,8 +23,7 @@ const BongChart = ({ price, candleData, volume, chartVisible }) => {
 
         priceFormat: {
           type: "price",
-          precision: 1,
-          minMove: 1,
+          minMove: 0.0001,
         },
       });
 
@@ -66,7 +65,7 @@ const BongChart = ({ price, candleData, volume, chartVisible }) => {
       setVolumeSeries(volumeSeriesObj);
       setCandleStickSeries(candleStickSeriesObj);
     }
-  }, [chartVisible]);
+  }, []);
 
   useEffect(() => {
     if (candleData && volume && candleStickSeries && volumeSeries) {
@@ -95,20 +94,22 @@ const BongChart = ({ price, candleData, volume, chartVisible }) => {
     }
   }, [price]);
 
+  const returnPrecision = (n) => {
+    if (n >= 1 && n < 100) {
+      return 2;
+    } else if (n >= 100) {
+      return 1;
+    } else if (n < 1) {
+      return 4;
+    }
+  };
+
   return (
     <CoinInfoContainer>
       <Chart ref={chartContainerRef}></Chart>
     </CoinInfoContainer>
   );
 };
-
-// const Center = styled.div`
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   justify-content: center;
-//   align-items: center;
-// `;
 
 const CoinInfoContainer = styled.div`
   margin: 0px 0px 0px 0px;
@@ -118,6 +119,7 @@ const CoinInfoContainer = styled.div`
   border: 1px solid #eeeeee;
   /* max-width: 420px; */
   height: 100%;
+
   display: flex;
   flex-direction: column;
   overflow-y: auto;
