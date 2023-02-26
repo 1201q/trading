@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 
-const Menu = () => {
+const Menu = ({ setMenuSelect }) => {
   const [x, setX] = useState(21);
   const headerRef = useRef(null);
 
@@ -28,10 +28,38 @@ const Menu = () => {
     <MenuContainer ref={headerRef}>
       <MenuInner>
         <ul>
-          <li onClick={() => setX(21)}>차트</li>
-          <li onClick={() => setX(70)}>호가</li>
-          <li onClick={() => setX(121)}>체결</li>
-          <li onClick={() => setX(171)}>주문</li>
+          <li
+            onClick={() => {
+              setX(21);
+              setMenuSelect("chart");
+            }}
+          >
+            차트
+          </li>
+          <li
+            onClick={() => {
+              setX(70);
+              setMenuSelect("orderbook");
+            }}
+          >
+            호가
+          </li>
+          <li
+            onClick={() => {
+              setX(121);
+              setMenuSelect("trade");
+            }}
+          >
+            체결
+          </li>
+          <li
+            onClick={() => {
+              setX(171);
+              setMenuSelect("order");
+            }}
+          >
+            주문
+          </li>
         </ul>
       </MenuInner>
       <UnderBarContainer>

@@ -45,7 +45,7 @@ const Padding = styled.div`
 `;
 
 const TradeContainer = styled.div`
-  margin: 20px 0px;
+  margin: 30px 0px;
   border-radius: 10px;
   background-color: white;
   width: 100%;

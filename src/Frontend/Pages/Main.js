@@ -29,6 +29,9 @@ const Main = () => {
   const [candleData, setCandleData] = useState(0); // 봉차트 테스트
   const [volume, setVolume] = useState(0);
 
+  // 메뉴
+  const [menuSelect, setMenuSelect] = useState("chart");
+
   const [coinCode, setCoinCode] = useState(
     !param_coincode ? "KRW-BTC" : param_coincode
   );
@@ -59,6 +62,13 @@ const Main = () => {
     getTrade();
     getCandle();
   }, [coinCode]);
+
+  useEffect(() => {
+    if (menuSelect === "chart") {
+      getCandle();
+      // 메뉴 이동시 차트 없어지는 현상 수정
+    }
+  }, [menuSelect]);
 
   //웹소켓
   function getPrice() {
@@ -174,7 +184,6 @@ const Main = () => {
       .get(axiosOptions.url, axiosOptions)
       .then((res) => res.data);
     getDayCandle(fetch);
-    console.log(fetch);
   }
 
   function getDayCandle(fetch) {
@@ -214,18 +223,22 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
-      <Menu />
-      <BongChart candleData={candleData} price={price} volume={volume} />
+      <Menu setMenuSelect={setMenuSelect} />
+      {menuSelect === "chart" && (
+        <BongChart candleData={candleData} price={price} volume={volume} />
+      )}
 
-      <Orderbook
-        orderbook={orderbook}
-        orderbookSumInfo={orderbookSumInfo}
-        price={price}
-        changePrice={changePrice}
-        orderPrice={orderPrice}
-        setOrderPrice={setOrderPrice}
-      />
-      <Trade trade={trade} />
+      {(menuSelect === "orderbook" || menuSelect === "chart") && (
+        <Orderbook
+          orderbook={orderbook}
+          orderbookSumInfo={orderbookSumInfo}
+          price={price}
+          changePrice={changePrice}
+          orderPrice={orderPrice}
+          setOrderPrice={setOrderPrice}
+        />
+      )}
+      {menuSelect === "trade" && <Trade trade={trade} />}
       <NavBar orderPrice={orderPrice} />
     </Center>
   );

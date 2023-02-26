@@ -94,16 +94,6 @@ const BongChart = ({ price, candleData, volume }) => {
     }
   }, [price]);
 
-  const returnPrecision = (n) => {
-    if (n >= 1 && n < 100) {
-      return 2;
-    } else if (n >= 100) {
-      return 1;
-    } else if (n < 1) {
-      return 4;
-    }
-  };
-
   return (
     <CoinInfoContainer>
       <Chart ref={chartContainerRef}></Chart>
@@ -112,21 +102,18 @@ const BongChart = ({ price, candleData, volume }) => {
 };
 
 const CoinInfoContainer = styled.div`
-  margin: 0px 0px 0px 0px;
+  margin: 0px 20px 0px 20px;
   margin-top: 20px;
   border-radius: 10px;
   background-color: white;
-  border: 1px solid #eeeeee;
-  /* max-width: 420px; */
   height: 100%;
-
   display: flex;
   flex-direction: column;
   overflow-y: auto;
 `;
 
 const Chart = styled.div`
-  margin-right: -10px;
+  margin-right: 0px;
 `;
 
 export default BongChart;
