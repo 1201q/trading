@@ -244,17 +244,6 @@ const Main = () => {
   );
 };
 
-const TT = styled.div`
-  position: fixed;
-  background-color: red;
-
-  height: 40px;
-  max-width: 450px;
-  width: 100vw;
-  z-index: 10; //test
-  top: 0;
-`;
-
 const Center = styled.div`
   max-width: 450px;
   width: 100vw;

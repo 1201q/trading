@@ -75,22 +75,26 @@ const BongChart = ({ price, candleData, volume }) => {
   }, [candleData, volume]);
 
   useEffect(() => {
-    if (candleStickSeries) {
-      const lastData = candleData[candleData.length - 1];
+    if (candleData.length !== 0) {
+      if (candleStickSeries) {
+        const lastData = candleData[candleData.length - 1];
 
-      if (lastData.high < price) {
-        lastData.high = price;
-      } else if (lastData.low > price) {
-        lastData.low = price;
+        if (lastData) {
+          if (lastData.high < price) {
+            lastData.high = price;
+          } else if (lastData.low > price) {
+            lastData.low = price;
+          }
+
+          candleStickSeries.update({
+            open: lastData.open,
+            high: lastData.high,
+            low: lastData.low,
+            close: price,
+            time: lastData.time,
+          });
+        }
       }
-
-      candleStickSeries.update({
-        open: lastData.open,
-        high: lastData.high,
-        low: lastData.low,
-        close: price,
-        time: lastData.time,
-      });
     }
   }, [price]);
 

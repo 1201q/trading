@@ -104,13 +104,12 @@ const Padding = styled.div`
 const OrderbookContainer = styled.div`
   margin: 0px 0px;
   margin-top: 20px;
-  margin-bottom: 30px;
+  margin-bottom: 70px;
   border-radius: 10px;
   background-color: white;
   width: 100%;
   display: flex;
   flex-direction: column;
-  overflow-y: auto;
 
   -ms-overflow-style: none;
 
