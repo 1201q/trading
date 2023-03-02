@@ -17,6 +17,7 @@ const queryClient = new QueryClient();
 // Main
 function App() {
   const [login, setLogin] = useState();
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
@@ -24,9 +25,11 @@ function App() {
         console.log("로그인되어있음");
         console.log(user);
         setLogin(true);
+        setUserData(user);
       } else {
         console.log("꺼지셈");
         setLogin(false);
+        setUserData(null);
       }
     });
   }, []);
@@ -67,6 +70,7 @@ function App() {
       >
         로그아웃
       </button>
+      {userData && userData.email}
       <div className="App">
         <BrowserRouter>
           <Routes>

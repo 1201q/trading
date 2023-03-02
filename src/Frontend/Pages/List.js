@@ -42,7 +42,7 @@ const List = () => {
     t.filter((coin) => coin.market.includes("KRW")).map((data) => {
       arr.push([data.market, data.korean_name]);
     });
-    console.log(arr);
+
     setCoinList(arr);
   }
 
@@ -109,7 +109,7 @@ const List = () => {
     <Center>
       <ListContainer>
         {coinList.map((coin, i) => (
-          <Line>
+          <Line key={i}>
             <div>
               <Link to={`/exchange/${coin[0]}`} key={coin[0]}>
                 <CoinKRnameBtn>{coin[1]}</CoinKRnameBtn>
