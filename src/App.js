@@ -22,12 +22,10 @@ function App() {
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
-        console.log("로그인되어있음");
         console.log(user);
         setLogin(true);
         setUserData(user);
       } else {
-        console.log("꺼지셈");
         setLogin(false);
         setUserData(null);
       }
