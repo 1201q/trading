@@ -159,7 +159,7 @@ const Center = styled(motion.div)`
 
 const ListContainer = styled(motion.div)`
   margin: 0px 0px;
-  padding: 10px 20px 15px 20px;
+  padding: 10px 0px 15px 0px;
   margin-top: 20px;
   margin-bottom: 50px;
   border-radius: 10px;
@@ -171,6 +171,7 @@ const ListContainer = styled(motion.div)`
 `;
 
 const Line = styled.div`
+  padding: 0px 20px;
   display: flex;
   justify-content: space-between;
   margin-bottom: 2px;

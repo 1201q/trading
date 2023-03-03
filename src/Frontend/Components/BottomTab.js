@@ -56,7 +56,8 @@ const NN = styled.div`
   display: flex;
   background-color: #464ae3;
   border: 1px solid #464ae3;
-  width: 450px;
+  width: 100%;
+  max-width: 450px;
   margin: 0px 0px 0px 0px;
   padding-bottom: 0px;
 `;
