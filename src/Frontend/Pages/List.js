@@ -1,13 +1,17 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
+import User from "../Components/User";
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
+import BottomTab from "../Components/BottomTab";
 
-const List = () => {
+const List = ({ userData }) => {
   const [coinList, setCoinList] = useState([]);
 
   const [coinFetchData, setCoinFetchData] = useState();
   const [coinDataArr, setCoinDataArr] = useState(Array(150).fill(null));
+
+  const [modalOnOff, setModalOnOff] = useState(false);
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
@@ -107,6 +111,18 @@ const List = () => {
 
   return (
     <Center>
+      <button
+        onClick={() => {
+          setModalOnOff(!modalOnOff);
+        }}
+      >
+        로그인
+      </button>
+      <User
+        userData={userData}
+        modalOnOff={modalOnOff}
+        setModalOnOff={setModalOnOff}
+      />
       <ListContainer>
         {coinList.map((coin, i) => (
           <Line key={i}>
@@ -119,20 +135,25 @@ const List = () => {
           </Line>
         ))}
       </ListContainer>
+      <BottomTab />
     </Center>
   );
 };
 const Center = styled.div`
+  position: static;
   display: flex;
   justify-content: center;
+  flex-direction: column;
   max-width: 450px;
   width: 100vw;
+  height: 100%;
 `;
 
 const ListContainer = styled.div`
   margin: 0px 0px;
-  padding: 10px 15px 15px 15px;
+  padding: 10px 0px 15px 0px;
   margin-top: 20px;
+  margin-bottom: 40px;
   border-radius: 10px;
   background-color: white;
   width: 100%;

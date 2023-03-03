@@ -32,9 +32,6 @@ function App() {
   const [login, setLogin] = useState();
   const [userData, setUserData] = useState(null);
 
-  const [id, setID] = useState("");
-  const [pw, setPW] = useState("");
-
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
       if (user) {
@@ -60,47 +57,6 @@ function App() {
     });
   }, []);
 
-  const emailLogin = async (e) => {
-    e.preventDefault();
-    const auth = getAuth();
-
-    // // 이메일 회원가입
-    // createUserWithEmailAndPassword(auth, id, pw)
-    //   .then((userData) => {
-    //     console.log(userData);
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-
-    // 로그인
-    signInWithEmailAndPassword(auth, id, pw)
-      .then((userData) => {
-        console.log(userData);
-      })
-      .catch((error) => console.log(error));
-  };
-
-  const socialLogin = async () => {
-    try {
-      if (!login) {
-        const provider = new GoogleAuthProvider();
-        await new signInWithRedirect(authService, provider);
-        const result = await getRedirectResult(authService);
-        console.log(result);
-        return;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-    return;
-  };
-
-  const signOut = async () => {
-    await authService.signOut();
-    return;
-  };
-
   async function add() {
     await addDoc(collection(dbService, "siba"), {
       text: "sibad",
@@ -115,49 +71,17 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <form onSubmit={emailLogin}>
-        <input
-          type="email"
-          value={id}
-          onChange={(e) => {
-            setID(e.target.value);
-          }}
-        />
-        <input
-          type="password"
-          value={pw}
-          onChange={(e) => {
-            setPW(e.target.value);
-          }}
-        />
-        <input type="submit" value="회원가입" />
-      </form>
-      <button
-        onClick={() => {
-          socialLogin();
-        }}
-      >
-        1
-      </button>
-      <button
-        onClick={() => {
-          signOut();
-        }}
-      >
-        로그아웃
-      </button>
-      {userData && userData.email}
-      <button
+      {/* <button
         onClick={() => {
           update();
         }}
       >
-        저장소
-      </button>
+        firestore update
+      </button> */}
       <div className="App">
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<List />}></Route>
+            <Route path="/" element={<List userData={userData} />}></Route>
             <Route path="/exchange" element={<Main />}></Route>
             <Route path="/exchange/:param_coincode" element={<Main />}></Route>
           </Routes>
