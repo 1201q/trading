@@ -1,18 +1,10 @@
 import Main from "./Frontend/Pages/Main";
 import List from "./Frontend/Pages/List";
+import Wallet from "./Frontend/Pages/Wallet";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { ReactQueryDevtools } from "react-query/devtools";
 import { authService, dbService } from "./firebase";
-import {
-  getRedirectResult,
-  GoogleAuthProvider,
-  signInWithRedirect,
-  signOut,
-  getAuth,
-  createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-} from "firebase/auth";
 import {
   addDoc,
   doc,
@@ -23,6 +15,7 @@ import {
   getDocs,
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
+import { AnimatePresence } from "framer-motion";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +24,14 @@ const queryClient = new QueryClient();
 function App() {
   const [login, setLogin] = useState();
   const [userData, setUserData] = useState(null);
+
+  const [tab, setTab] = useState(() => {
+    if (window.location.pathname === "/wallet") {
+      return "wallet";
+    } else if (window.location.pathname === "/") {
+      return "exchange";
+    }
+  });
 
   useEffect(() => {
     authService.onAuthStateChanged((user) => {
@@ -70,25 +71,24 @@ function App() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      {/* <button
-        onClick={() => {
-          update();
-        }}
-      >
-        firestore update
-      </button> */}
-      <div className="App">
-        <BrowserRouter>
+    <div className="App">
+      <BrowserRouter>
+        <AnimatePresence>
           <Routes>
-            <Route path="/" element={<List userData={userData} />}></Route>
+            <Route
+              path="/"
+              element={<List userData={userData} setTab={setTab} tab={tab} />}
+            ></Route>
+            <Route
+              path="/wallet"
+              element={<Wallet setTab={setTab} tab={tab} />}
+            ></Route>
             <Route path="/exchange" element={<Main />}></Route>
             <Route path="/exchange/:param_coincode" element={<Main />}></Route>
           </Routes>
-        </BrowserRouter>
-      </div>
-      <ReactQueryDevtools initialIsOpen={false} />
-    </QueryClientProvider>
+        </AnimatePresence>
+      </BrowserRouter>
+    </div>
   );
 }
 

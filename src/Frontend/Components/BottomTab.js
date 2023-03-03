@@ -2,19 +2,39 @@ import styled from "styled-components";
 import { faCoins, faUser } from "@fortawesome/free-solid-svg-icons";
 // import { faCoins, faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useEffect } from "react";
+import { Link } from "react-router-dom";
 
-const BottomTab = () => {
+const BottomTab = ({ tab, setTab }) => {
   return (
     <Nav>
       <NN>
-        <Btn>
-          <FontAwesomeIcon icon={faCoins} />
-          <p>거래소</p>
-        </Btn>
-        <Btn>
-          <FontAwesomeIcon icon={faUser} />
-          <p>내정보</p>
-        </Btn>
+        <StyledLink
+          to="/"
+          tabcolor={tab === "exchange" ? "white" : "rgba(215, 226, 254, 0.5)"}
+        >
+          <Menu
+            onClick={() => {
+              setTab("exchange");
+            }}
+          >
+            <FontAwesomeIcon icon={faCoins} />
+            <p>거래소</p>
+          </Menu>
+        </StyledLink>
+        <StyledLink
+          to="/wallet"
+          tabcolor={tab === "wallet" ? "white" : "rgba(215, 226, 254, 0.5)"}
+        >
+          <Menu
+            onClick={() => {
+              setTab("wallet");
+            }}
+          >
+            <FontAwesomeIcon icon={faUser} />
+            <p>내정보</p>
+          </Menu>
+        </StyledLink>
       </NN>
     </Nav>
   );
@@ -41,7 +61,7 @@ const NN = styled.div`
   padding-bottom: 0px;
 `;
 
-const Btn = styled.div`
+const StyledLink = styled(Link)`
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -51,12 +71,19 @@ const Btn = styled.div`
   margin: 0px;
   border-radius: 12px;
   font-weight: 800;
-  color: rgba(215, 226, 254, 0.5);
+  color: ${(props) => props.tabcolor};
+  text-decoration: none;
   p {
     margin: 0;
     margin-top: 3px;
     font-size: 13px;
   }
+`;
+
+const Menu = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 `;
 
 export default BottomTab;

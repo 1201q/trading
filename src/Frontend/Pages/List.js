@@ -1,17 +1,18 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import User from "../Components/User";
+import LoginPopup from "../Components/LoginPopup";
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import BottomTab from "../Components/BottomTab";
+import { motion } from "framer-motion";
 
-const List = ({ userData }) => {
+const List = ({ userData, setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
 
   const [coinFetchData, setCoinFetchData] = useState();
   const [coinDataArr, setCoinDataArr] = useState(Array(150).fill(null));
 
-  const [modalOnOff, setModalOnOff] = useState(false);
+  const [modalOnOff, setModalOnOff] = useState("false");
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
@@ -113,17 +114,24 @@ const List = ({ userData }) => {
     <Center>
       <button
         onClick={() => {
-          setModalOnOff(!modalOnOff);
+          setModalOnOff("true");
         }}
       >
         로그인
       </button>
-      <User
+      <LoginPopup
         userData={userData}
         modalOnOff={modalOnOff}
         setModalOnOff={setModalOnOff}
       />
-      <ListContainer>
+      <ListContainer
+        initial={{ opacity: 0.7, x: -10 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -10 }}
+        transition={{
+          duration: 0.2,
+        }}
+      >
         {coinList.map((coin, i) => (
           <Line key={i}>
             <div>
@@ -135,11 +143,11 @@ const List = ({ userData }) => {
           </Line>
         ))}
       </ListContainer>
-      <BottomTab />
+      <BottomTab setTab={setTab} tab={tab} />
     </Center>
   );
 };
-const Center = styled.div`
+const Center = styled(motion.div)`
   position: static;
   display: flex;
   justify-content: center;
@@ -149,11 +157,11 @@ const Center = styled.div`
   height: 100%;
 `;
 
-const ListContainer = styled.div`
+const ListContainer = styled(motion.div)`
   margin: 0px 0px;
-  padding: 10px 0px 15px 0px;
+  padding: 10px 20px 15px 20px;
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
   border-radius: 10px;
   background-color: white;
   width: 100%;

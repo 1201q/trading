@@ -8,6 +8,7 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+  signInWithPopup,
 } from "firebase/auth";
 import styled from "styled-components";
 import {
@@ -17,8 +18,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Goo from "../icons/Google.js";
+import { motion } from "framer-motion";
 
-const User = ({ modalOnOff, setModalOnOff, userData }) => {
+const LoginPopup = ({ modalOnOff, setModalOnOff, userData }) => {
   const [login, setLogin] = useState(); // 현재 로그인이 되어있는지
   const [signInOrCreateUser, setSignInOrCreateUser] = useState("in");
 
@@ -76,7 +78,7 @@ const User = ({ modalOnOff, setModalOnOff, userData }) => {
   };
 
   return (
-    <ModalContainer modalOnOff={modalOnOff}>
+    <ModalContainer modalonoff={modalOnOff}>
       <Modal>
         <ModalLogin>
           <ModalHeader>
@@ -137,7 +139,7 @@ const User = ({ modalOnOff, setModalOnOff, userData }) => {
         </ModalLogin>
         <ModalOffBtn
           onClick={() => {
-            setModalOnOff(false);
+            setModalOnOff("false");
           }}
         >
           <FontAwesomeIcon icon={faX} color="#9BA1A8"></FontAwesomeIcon>
@@ -147,8 +149,8 @@ const User = ({ modalOnOff, setModalOnOff, userData }) => {
   );
 };
 
-const ModalContainer = styled.div`
-  display: ${(props) => props.modalOnOff || "none"};
+const ModalContainer = styled(motion.div)`
+  display: ${(props) => (props.modalonoff === "false" ? "none" : "")};
   position: fixed;
   top: 0;
   bottom: 0;
@@ -252,4 +254,4 @@ const ModalOffBtn = styled.button`
   margin-right: 20px;
 `;
 
-export default User;
+export default LoginPopup;
