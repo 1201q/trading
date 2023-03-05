@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Menu from "../Components/Menu";
 import Header from "../Components/Header";
+import OrderbookBar from "../Components/OrderbookBar";
 
 const Main = () => {
   let { param_coincode } = useParams();
@@ -224,10 +225,13 @@ const Main = () => {
         candle={candle}
       />
       <Menu setMenuSelect={setMenuSelect} />
+
       {menuSelect === "chart" && (
         <BongChart candleData={candleData} price={price} volume={volume} />
       )}
-
+      {menuSelect === "chart" && (
+        <OrderbookBar orderbookSumInfo={orderbookSumInfo} />
+      )}
       {(menuSelect === "orderbook" || menuSelect === "chart") && (
         <Orderbook
           orderbook={orderbook}
@@ -239,6 +243,7 @@ const Main = () => {
         />
       )}
       {menuSelect === "trade" && <Trade trade={trade} />}
+
       <NavBar orderPrice={orderPrice} />
     </Center>
   );

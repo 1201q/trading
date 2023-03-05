@@ -30,6 +30,8 @@ function App() {
       return "wallet";
     } else if (window.location.pathname === "/") {
       return "exchange";
+    } else {
+      return "wallet";
     }
   });
 
@@ -56,6 +58,12 @@ function App() {
     onSnapshot(doc(dbService, "siba", "kbvqheO4hkTccxvYw353"), (doc) => {
       console.log(doc.data());
     });
+
+    if (window.location.pathname === "/wallet") {
+      console.log("wallet");
+    } else if (window.location.pathname === "/") {
+      console.log("///");
+    }
   }, []);
 
   async function add() {
