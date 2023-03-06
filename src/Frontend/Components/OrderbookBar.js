@@ -24,7 +24,8 @@ const OrderbookBar = ({ orderbookSumInfo }) => {
           labelTextColor="white"
           isInteractive={false}
           innerPadding={1}
-          colors={({ id }) => (id === "ask" ? "#464AE3" : "#F05354")} // datum prop 사용
+          animate={false}
+          colors={({ id }) => (id === "ask" ? "#1763b6" : "#e12343")} // datum prop 사용
         />
       )}
     </div>

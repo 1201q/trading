@@ -4,13 +4,15 @@ import styled, { keyframes, css } from "styled-components";
 const Header = ({ price, coinCode, changePrice }) => {
   const numberFormatter = (n) => {
     let newNumber = n;
-    if (n >= 1 && n < 100) {
+
+    if (Math.abs(n) >= 1 && Math.abs(n) < 100) {
       newNumber = n.toFixed(2).toLocaleString();
-    } else if (n >= 100) {
+    } else if (Math.abs(n) >= 100) {
       newNumber = Math.floor(n).toLocaleString();
-    } else if (n < 1) {
+    } else if (Math.abs(n) < 1) {
       newNumber = n.toFixed(4).toLocaleString();
     }
+
     return newNumber;
   };
 

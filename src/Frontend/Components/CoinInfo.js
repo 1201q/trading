@@ -3,13 +3,15 @@ import styled from "styled-components";
 const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo }) => {
   const numberFormatter = (n) => {
     let newNumber = n;
-    if (n >= 1 && n < 100) {
+
+    if (Math.abs(n) >= 1 && Math.abs(n) < 100) {
       newNumber = n.toFixed(2).toLocaleString();
-    } else if (n >= 100) {
+    } else if (Math.abs(n) >= 100) {
       newNumber = Math.floor(n).toLocaleString();
-    } else if (n < 1) {
+    } else if (Math.abs(n) < 1) {
       newNumber = n.toFixed(4).toLocaleString();
     }
+
     return newNumber;
   };
 
@@ -42,7 +44,7 @@ const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo }) => {
           </PriceInfo>
 
           <PriceInfo fSize="12px" fMarginTop="10px">
-            {changePrice[2] && changePrice[2].toLocaleString()}
+            {numberFormatter(changePrice[2])}
           </PriceInfo>
         </Info>
         <MoreInfo>
