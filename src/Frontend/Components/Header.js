@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef } from "react";
 import styled, { keyframes, css } from "styled-components";
 
 const Header = ({ price, coinCode, changePrice }) => {

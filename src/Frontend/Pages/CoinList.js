@@ -6,11 +6,10 @@ import styled from "styled-components";
 import BottomTab from "../Components/BottomTab";
 import { motion } from "framer-motion";
 
-const List = ({ userData, setTab, tab }) => {
+const List = ({ setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
   const [coinPriceArr, setCoinPriceArr] = useState([]);
   const [coinPriceArrReady, setCoinPriceArrReady] = useState(false);
-  const [modalOnOff, setModalOnOff] = useState("false");
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
@@ -36,7 +35,6 @@ const List = ({ userData, setTab, tab }) => {
     });
 
     setCoinList(arr);
-    console.log(arr);
   }
 
   function getCoinPrice() {
@@ -77,18 +75,6 @@ const List = ({ userData, setTab, tab }) => {
     }
   }
 
-  // const numberFormatter = (n) => {
-  //   let newNumber = n;
-  //   if (n >= 1 && n < 100) {
-  //     newNumber = n.toFixed(2).toLocaleString();
-  //   } else if (n >= 100) {
-  //     newNumber = Math.floor(n).toLocaleString();
-  //   } else if (n < 1) {
-  //     newNumber = n.toFixed(4).toLocaleString();
-  //   }
-  //   return newNumber;
-  // };
-
   const percentageFormatter = (n) => {
     if (n > 0) {
       return `+${n.toFixed(2)}%`;
@@ -124,26 +110,14 @@ const List = ({ userData, setTab, tab }) => {
 
   return (
     <Center>
-      <button
-        onClick={() => {
-          setModalOnOff("true");
-        }}
-      >
-        로그인
-      </button>
-      <LoginPopup
-        userData={userData}
-        modalOnOff={modalOnOff}
-        setModalOnOff={setModalOnOff}
-      />
       {coinPriceArrReady && (
         <ListContainer
-          initial={{ opacity: 0.7, x: -10 }}
-          animate={{ opacity: 1, x: 0 }}
-          exit={{ opacity: 0, x: -10 }}
-          transition={{
-            duration: 0.2,
-          }}
+        // initial={{ opacity: 0.7, x: -10 }}
+        // animate={{ opacity: 1, x: 0 }}
+        // exit={{ opacity: 0, x: -10 }}
+        // transition={{
+        //   duration: 0.2,
+        // }}
         >
           {coinPriceArr.map((coin, i) => (
             <Line key={i}>
@@ -219,7 +193,7 @@ const Line = styled.div`
 
 const LineContainer = styled.div`
   display: flex;
-  padding: 10px 10px;
+  padding: 10px 20px;
 `;
 
 const CoinKRnameBtn = styled.button`

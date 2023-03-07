@@ -1,9 +1,7 @@
-import Main from "./Frontend/Pages/Main";
-import List from "./Frontend/Pages/List";
+import CoinDetail from "./Frontend/Pages/CoinDetail";
+import CoinList from "./Frontend/Pages/CoinList";
 import Wallet from "./Frontend/Pages/Wallet";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { QueryClient, QueryClientProvider } from "react-query";
-import { ReactQueryDevtools } from "react-query/devtools";
 import { authService, dbService } from "./firebase";
 import {
   addDoc,
@@ -16,8 +14,6 @@ import {
 } from "firebase/firestore";
 import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-
-const queryClient = new QueryClient();
 
 //https://firebase.google.com/docs/auth/web/start?hl=ko&authuser=0
 // Main
@@ -56,15 +52,22 @@ function App() {
 
     // 특정한 유저만 가져옴
     onSnapshot(doc(dbService, "siba", "kbvqheO4hkTccxvYw353"), (doc) => {
-      console.log(doc.data());
+      // console.log(doc.data());
     });
 
-    if (window.location.pathname === "/wallet") {
-      console.log("wallet");
-    } else if (window.location.pathname === "/") {
-      console.log("///");
-    }
+    window.addEventListener("popstate", handleGoBackException);
+    return () => {
+      window.addEventListener("popstate", handleGoBackException);
+    };
   }, []);
+
+  function handleGoBackException() {
+    if (window.location.pathname === "/") {
+      setTab("exchange");
+    } else if (window.location.pathname === "/wallet") {
+      setTab("wallet");
+    }
+  }
 
   async function add() {
     await addDoc(collection(dbService, "siba"), {
@@ -85,14 +88,19 @@ function App() {
           <Routes>
             <Route
               path="/"
-              element={<List userData={userData} setTab={setTab} tab={tab} />}
+              element={
+                <CoinList userData={userData} setTab={setTab} tab={tab} />
+              }
             ></Route>
             <Route
               path="/wallet"
-              element={<Wallet setTab={setTab} tab={tab} />}
+              element={<Wallet userData={userData} setTab={setTab} tab={tab} />}
             ></Route>
-            <Route path="/exchange" element={<Main />}></Route>
-            <Route path="/exchange/:param_coincode" element={<Main />}></Route>
+            <Route path="/exchange" element={<CoinDetail />}></Route>
+            <Route
+              path="/exchange/:param_coincode"
+              element={<CoinDetail />}
+            ></Route>
           </Routes>
         </AnimatePresence>
       </BrowserRouter>

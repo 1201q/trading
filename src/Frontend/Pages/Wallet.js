@@ -3,10 +3,14 @@ import styled from "styled-components";
 import { motion } from "framer-motion";
 import WalletInfo from "../Components/WalletInfo";
 import WalletDetail from "../Components/WalletDetail";
-import OrderbookBar from "../Components/OrderbookBar";
-import { ResponsiveBar } from "@nivo/bar";
+import LoginPopup from "../Components/LoginPopup";
+import { useEffect, useState } from "react";
 
-const Wallet = ({ tab, setTab }) => {
+const Wallet = ({ userData, tab, setTab }) => {
+  const [modalOnOff, setModalOnOff] = useState("false");
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <Center>
       <WalletContainer
@@ -21,6 +25,18 @@ const Wallet = ({ tab, setTab }) => {
       </WalletContainer>
       <WalletDetailContainer>
         <WalletDetail />
+        <button
+          onClick={() => {
+            setModalOnOff("true");
+          }}
+        >
+          로그인
+        </button>
+        <LoginPopup
+          userData={userData}
+          modalOnOff={modalOnOff}
+          setModalOnOff={setModalOnOff}
+        />
       </WalletDetailContainer>
 
       <BottomTab tab={tab} setTab={setTab} />

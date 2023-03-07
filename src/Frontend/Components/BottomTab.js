@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { faCoins, faUser } from "@fortawesome/free-solid-svg-icons";
-// import { faCoins, faUser } from "@fortawesome/free-regular-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useEffect } from "react";
 import { Link } from "react-router-dom";
@@ -85,6 +84,7 @@ const Menu = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 100%;
 `;
 
 export default BottomTab;

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import styled, { keyframes, css } from "styled-components";
+import styled from "styled-components";
 
 const Menu = ({ setMenuSelect }) => {
   const [x, setX] = useState(21);

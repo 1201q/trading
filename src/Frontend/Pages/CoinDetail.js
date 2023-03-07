@@ -37,6 +37,9 @@ const Main = () => {
     !param_coincode ? "KRW-BTC" : param_coincode
   );
 
+  const [orderBookBarAnimationControl, setOrderBookBarAnimationControl] =
+    useState(false);
+
   // websocket
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
@@ -62,6 +65,9 @@ const Main = () => {
     getOrderbook();
     getTrade();
     getCandle();
+    setTimeout(() => {
+      setOrderBookBarAnimationControl(true);
+    }, 1000);
   }, [coinCode]);
 
   useEffect(() => {
@@ -230,7 +236,10 @@ const Main = () => {
         <BongChart candleData={candleData} price={price} volume={volume} />
       )}
       {menuSelect === "chart" && (
-        <OrderbookBar orderbookSumInfo={orderbookSumInfo} />
+        <OrderbookBar
+          orderbookSumInfo={orderbookSumInfo}
+          orderBookBarAnimationControl={orderBookBarAnimationControl}
+        />
       )}
       {(menuSelect === "orderbook" || menuSelect === "chart") && (
         <Orderbook

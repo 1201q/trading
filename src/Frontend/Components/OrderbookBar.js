@@ -1,7 +1,7 @@
 import * as React from "react";
 import { ResponsiveBar } from "@nivo/bar";
 
-const OrderbookBar = ({ orderbookSumInfo }) => {
+const OrderbookBar = ({ orderbookSumInfo, orderBookBarAnimationControl }) => {
   return (
     <div style={{ width: "100%", height: "40px" }}>
       {typeof orderbookSumInfo[1] === "number" && (
@@ -23,8 +23,8 @@ const OrderbookBar = ({ orderbookSumInfo }) => {
           enableGridX={false}
           labelTextColor="white"
           isInteractive={false}
-          innerPadding={1}
-          animate={false}
+          innerPadding={3}
+          animate={orderBookBarAnimationControl ? true : false}
           colors={({ id }) => (id === "ask" ? "#1763b6" : "#e12343")} // datum prop 사용
         />
       )}
