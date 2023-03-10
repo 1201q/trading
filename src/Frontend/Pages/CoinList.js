@@ -1,6 +1,5 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import LoginPopup from "../Components/LoginPopup";
 import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import BottomTab from "../Components/BottomTab";
@@ -10,11 +9,13 @@ import {
   numberFormatter,
   percentageFormatter,
 } from "../Context/FormatterContext";
+import Skeleton from "react-loading-skeleton";
+import "react-loading-skeleton/dist/skeleton.css";
 
 const List = ({ setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
   const [coinPriceArr, setCoinPriceArr] = useState([]);
-  const [coinPriceArrReady, setCoinPriceArrReady] = useState(false);
+  const [coinListLoading, setCoinListLoading] = useState(true);
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
@@ -35,6 +36,10 @@ const List = ({ setTab, tab }) => {
       }
     };
   }, [coinList]);
+
+  useEffect(() => {
+    if (!coinListLoading) console.log("로딩");
+  }, [coinListLoading]);
 
   async function getCoinList() {
     let arr = [];
@@ -62,7 +67,6 @@ const List = ({ setTab, tab }) => {
       wsPrice.current.onmessage = async (e) => {
         const { data } = e;
         const text = await new Response(data).json();
-        // console.log(text);
 
         const coinTempList = coinList.map((data) => data[0]);
         const coinIndex = coinTempList.indexOf(text.code);
@@ -73,14 +77,10 @@ const List = ({ setTab, tab }) => {
         tmp[coinIndex][4] = text.signed_change_rate;
         tmp[coinIndex][5] = text.acc_trade_price_24h;
 
-        tmp.sort((a, b) => b[5] - a[5]);
+        setCoinPriceArr(tmp.sort((a, b) => b[5] - a[5]));
 
-        setCoinPriceArr(tmp);
-        setCoinPriceArrReady(true);
+        setCoinListLoading(false);
       };
-      // wsPrice.current.onclose = () => {
-      //   console.log("종료됨");
-      // };
     } catch (e) {
       console.log(e);
     }
@@ -88,7 +88,7 @@ const List = ({ setTab, tab }) => {
 
   return (
     <Center>
-      {coinPriceArrReady && (
+      {!coinListLoading ? (
         <ListContainer>
           {coinPriceArr.map((coin, i) => (
             <Line key={i}>
@@ -122,11 +122,33 @@ const List = ({ setTab, tab }) => {
                   <div>{numberFormatter(coin[3])}</div>
                   <div>{percentageFormatter(coin[4] * 100)}</div>
                 </Box>
-
                 <Box>{coin[5] && volumeFormatter(coin[5])}</Box>
               </LineContainer>
             </Line>
           ))}
+        </ListContainer>
+      ) : (
+        <ListContainer>
+          {Array(50)
+            .fill(0)
+            .map(() => (
+              <Line>
+                <LoadingContainer>
+                  <LoadingBox Boxwidth={"25%"}>
+                    <Skeleton count={2} height={16} />
+                  </LoadingBox>
+                  <LoadingBox Boxwidth={"20%"}>
+                    <Skeleton count={1} height={20} />
+                  </LoadingBox>
+                  <LoadingBox Boxwidth={"20%"}>
+                    <Skeleton count={2} height={14} />
+                  </LoadingBox>
+                  <LoadingBox Boxwidth={"20%"}>
+                    <Skeleton count={1} height={30} />
+                  </LoadingBox>
+                </LoadingContainer>
+              </Line>
+            ))}
         </ListContainer>
       )}
       <BottomTab setTab={setTab} tab={tab} />
@@ -158,12 +180,20 @@ const ListContainer = styled(motion.div)`
 
 const Line = styled.div`
   width: 100%;
+  height: 54px;
   /* box-shadow: 0 0 0 1px #eff1f2 inset; */
   border-bottom: 1px solid #ebeff0;
 `;
 
 const LineContainer = styled.div`
   display: flex;
+  padding: 10px 20px;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 20px;
 `;
 
@@ -187,6 +217,10 @@ const CoinEnname = styled.div`
 
 const HeaderBox = styled.div`
   width: 25%;
+`;
+
+const LoadingBox = styled.div`
+  width: ${(props) => props.Boxwidth};
 `;
 
 const Box = styled.div`
