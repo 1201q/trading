@@ -14,7 +14,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 
 const List = ({ setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
-  const [coinPriceArr, setCoinPriceArr] = useState([]);
+  const [coinPriceDataArr, setCoinPriceDataArr] = useState([]);
   const [coinListLoading, setCoinListLoading] = useState(true);
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
@@ -26,7 +26,7 @@ const List = ({ setTab, tab }) => {
     }
 
     if (coinList.length !== 0) {
-      getCoinPrice();
+      getCoinPriceData();
     }
 
     return () => {
@@ -36,10 +36,6 @@ const List = ({ setTab, tab }) => {
       }
     };
   }, [coinList]);
-
-  useEffect(() => {
-    if (!coinListLoading) console.log("로딩");
-  }, [coinListLoading]);
 
   async function getCoinList() {
     let arr = [];
@@ -54,7 +50,7 @@ const List = ({ setTab, tab }) => {
     setCoinList(arr);
   }
 
-  function getCoinPrice() {
+  function getCoinPriceData() {
     try {
       wsPrice.current = new WebSocket(wsURL);
       wsPrice.current.onopen = () => {
@@ -71,15 +67,18 @@ const List = ({ setTab, tab }) => {
         const coinTempList = coinList.map((data) => data[0]);
         const coinIndex = coinTempList.indexOf(text.code);
 
-        let tmp = [...coinList];
-        tmp[coinIndex][2] = text.trade_price;
-        tmp[coinIndex][3] = text.signed_change_price;
-        tmp[coinIndex][4] = text.signed_change_rate;
-        tmp[coinIndex][5] = text.acc_trade_price_24h;
+        let updatedCoinList = [...coinList];
+        updatedCoinList[coinIndex][2] = text.trade_price;
+        updatedCoinList[coinIndex][3] = text.signed_change_price;
+        updatedCoinList[coinIndex][4] = text.signed_change_rate;
+        updatedCoinList[coinIndex][5] = text.acc_trade_price_24h;
 
-        setCoinPriceArr(tmp.sort((a, b) => b[5] - a[5]));
+        updatedCoinList.sort((a, b) => b[5] - a[5]);
+        setCoinPriceDataArr(updatedCoinList);
 
-        setCoinListLoading(false);
+        setTimeout(() => {
+          setCoinListLoading(false);
+        }, 200);
       };
     } catch (e) {
       console.log(e);
@@ -90,7 +89,7 @@ const List = ({ setTab, tab }) => {
     <Center>
       {!coinListLoading ? (
         <ListContainer>
-          {coinPriceArr.map((coin, i) => (
+          {coinPriceDataArr.map((coin, i) => (
             <Line key={i}>
               <LineContainer>
                 <HeaderBox>
@@ -131,8 +130,8 @@ const List = ({ setTab, tab }) => {
         <ListContainer>
           {Array(50)
             .fill(0)
-            .map(() => (
-              <Line>
+            .map((data, i) => (
+              <Line key={i}>
                 <LoadingContainer>
                   <LoadingBox Boxwidth={"25%"}>
                     <Skeleton count={2} height={16} />

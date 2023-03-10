@@ -1,6 +1,6 @@
 import dayjs from "dayjs";
 import styled from "styled-components";
-import { formatter } from "../Context/FormatterContext";
+import { formatter, numberFormatter } from "../Context/FormatterContext";
 
 const Trade = ({ trade }) => {
   return (
@@ -20,7 +20,7 @@ const Trade = ({ trade }) => {
               <List Lwidth={"20%"}>
                 {dayjs(data.trade_timestamp).format("HH:mm:ss")}
               </List>
-              <List Lwidth={"25%"}>{formatter(data.trade_price)}</List>
+              <List Lwidth={"25%"}>{numberFormatter(data.trade_price)}</List>
               <List
                 Lwidth={"30%"}
                 fontColor={data.ask_bid === "ASK" ? "#3c87e5" : "#CD614D"}
@@ -28,7 +28,9 @@ const Trade = ({ trade }) => {
                 {data.trade_volume.toFixed(6)}
               </List>
               <List Lwidth={"25%"}>
-                {formatter(Math.round(data.trade_volume * data.trade_price))}
+                {numberFormatter(
+                  Math.round(data.trade_volume * data.trade_price)
+                )}
               </List>
             </Line>
           ))}
