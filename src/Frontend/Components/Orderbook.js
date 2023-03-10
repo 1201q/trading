@@ -1,5 +1,9 @@
 import styled from "styled-components";
 import OrderbookPriceBar from "./OrderbookPriceBar";
+import {
+  numberFormatter,
+  percentageFormatter,
+} from "../Context/FormatterContext";
 
 const Orderbook = ({
   orderbook,
@@ -9,28 +13,6 @@ const Orderbook = ({
   orderPrice,
   setOrderPrice,
 }) => {
-  const numberFormatter = (n) => {
-    let newNumber = n;
-    if (n >= 1 && n < 100) {
-      newNumber = n.toFixed(2).toLocaleString();
-    } else if (n >= 100) {
-      newNumber = Math.floor(n).toLocaleString();
-    } else if (n < 1) {
-      newNumber = n.toFixed(4).toLocaleString();
-    }
-    return newNumber;
-  };
-
-  const percentageFormatter = (n) => {
-    if (n > 0) {
-      return `+${n.toFixed(2)}%`;
-    } else if (n < 0) {
-      return `${n.toFixed(2)}%`;
-    } else if (n === 0) {
-      return ` +${n.toFixed(2)}%`;
-    }
-  };
-
   return (
     <OrderbookContainer>
       <Padding>

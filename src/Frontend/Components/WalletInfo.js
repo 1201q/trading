@@ -7,7 +7,7 @@ const WalletInfo = () => {
         총 보유자산
       </Header>
       <Header Hbold="600" HfontSize={"32px"}>
-        109,000,000원
+        1원
       </Header>
       <Summary>
         <SummaryBox>

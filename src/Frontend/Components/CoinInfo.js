@@ -1,30 +1,10 @@
 import styled from "styled-components";
+import {
+  numberFormatter,
+  percentageFormatter,
+} from "../Context/FormatterContext";
 
 const CoinInfo = ({ coinCode, price, changePrice, morePriceInfo }) => {
-  const numberFormatter = (n) => {
-    let newNumber = n;
-
-    if (Math.abs(n) >= 1 && Math.abs(n) < 100) {
-      newNumber = n.toFixed(2).toLocaleString();
-    } else if (Math.abs(n) >= 100) {
-      newNumber = Math.floor(n).toLocaleString();
-    } else if (Math.abs(n) < 1) {
-      newNumber = n.toFixed(4).toLocaleString();
-    }
-
-    return newNumber;
-  };
-
-  const percentageFormatter = (n) => {
-    if (n > 0) {
-      return `+${n.toFixed(2)}%`;
-    } else if (n < 0) {
-      return `${n.toFixed(2)}%`;
-    } else if (n === 0) {
-      return ` ${n.toFixed(2)}%`;
-    }
-  };
-
   return (
     <CoinInfoContainer>
       <Padding>

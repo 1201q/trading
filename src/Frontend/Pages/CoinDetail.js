@@ -68,6 +68,20 @@ const Main = () => {
     setTimeout(() => {
       setOrderBookBarAnimationControl(true);
     }, 1000);
+
+    return () => {
+      if (
+        (wsPrice.current !== null && wsPrice.current.readyState === 1) ||
+        (wsOrderbook.current !== null &&
+          wsOrderbook.current.readyState === 1) ||
+        (wsTrade.current !== null && wsTrade.current.readyState === 1)
+      ) {
+        wsPrice.current.close();
+        wsOrderbook.current.close();
+        wsTrade.current.close();
+        console.log("디테일 웹소켓 종료");
+      }
+    };
   }, [coinCode]);
 
   useEffect(() => {
@@ -79,13 +93,6 @@ const Main = () => {
 
   //웹소켓
   function getPrice() {
-    if (wsPrice.current !== null) {
-      if (wsPrice.current.readyState === 1) {
-        wsPrice.current.close();
-        console.log("check");
-      }
-    }
-
     try {
       wsPrice.current = new WebSocket(wsURL);
       wsPrice.current.onopen = () => {
@@ -118,13 +125,6 @@ const Main = () => {
   }
 
   function getOrderbook() {
-    if (wsOrderbook.current !== null) {
-      if (wsOrderbook.current.readyState === 1) {
-        wsOrderbook.current.close();
-        console.log("check");
-      }
-    }
-
     try {
       wsOrderbook.current = new WebSocket(wsURL);
       wsOrderbook.current.onopen = () => {
@@ -157,12 +157,6 @@ const Main = () => {
   }
 
   function getTrade() {
-    if (wsTrade.current !== null) {
-      if (wsTrade.current.readyState === 1) {
-        wsTrade.current.close();
-        console.log("check");
-      }
-    }
     try {
       wsTrade.current = new WebSocket(wsURL);
       wsTrade.current.onopen = () => {
@@ -235,6 +229,7 @@ const Main = () => {
       {menuSelect === "chart" && (
         <BongChart candleData={candleData} price={price} volume={volume} />
       )}
+
       {menuSelect === "chart" && (
         <OrderbookBar
           orderbookSumInfo={orderbookSumInfo}

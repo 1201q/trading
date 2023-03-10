@@ -1,11 +1,8 @@
 import dayjs from "dayjs";
 import styled from "styled-components";
+import { formatter } from "../Context/FormatterContext";
 
 const Trade = ({ trade }) => {
-  const formatter = (n) => {
-    return n.toLocaleString();
-  };
-
   return (
     <TradeContainer>
       <Padding>

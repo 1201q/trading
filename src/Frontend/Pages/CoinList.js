@@ -5,6 +5,11 @@ import { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import BottomTab from "../Components/BottomTab";
 import { motion } from "framer-motion";
+import {
+  volumeFormatter,
+  numberFormatter,
+  percentageFormatter,
+} from "../Context/FormatterContext";
 
 const List = ({ setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
@@ -22,6 +27,13 @@ const List = ({ setTab, tab }) => {
     if (coinList.length !== 0) {
       getCoinPrice();
     }
+
+    return () => {
+      if (wsPrice.current !== null && wsPrice.current.readyState === 1) {
+        wsPrice.current.close();
+        console.log("코인리스트 웹소켓 종료");
+      }
+    };
   }, [coinList]);
 
   async function getCoinList() {
@@ -38,23 +50,19 @@ const List = ({ setTab, tab }) => {
   }
 
   function getCoinPrice() {
-    if (wsPrice.current !== null) {
-      if (wsPrice.current.readyState === 1) {
-        wsPrice.current.close();
-        console.log("check");
-      }
-    }
-
     try {
       wsPrice.current = new WebSocket(wsURL);
       wsPrice.current.onopen = () => {
         wsPrice.current.send(
           `[{"ticket" : "2"}, {"type" : "ticker","codes": [${coinList}]}]`
         );
+        console.log("코인리스트 웹소켓 열림");
       };
+
       wsPrice.current.onmessage = async (e) => {
         const { data } = e;
         const text = await new Response(data).json();
+        // console.log(text);
 
         const coinTempList = coinList.map((data) => data[0]);
         const coinIndex = coinTempList.indexOf(text.code);
@@ -70,55 +78,18 @@ const List = ({ setTab, tab }) => {
         setCoinPriceArr(tmp);
         setCoinPriceArrReady(true);
       };
+      // wsPrice.current.onclose = () => {
+      //   console.log("종료됨");
+      // };
     } catch (e) {
       console.log(e);
     }
   }
 
-  const percentageFormatter = (n) => {
-    if (n > 0) {
-      return `+${n.toFixed(2)}%`;
-    } else if (n < 0) {
-      return `${n.toFixed(2)}%`;
-    } else if (n === 0) {
-      return ` ${n.toFixed(2)}%`;
-    }
-  };
-
-  const numberFormatter = (n) => {
-    let newNumber = n;
-
-    if (Math.abs(n) >= 1 && Math.abs(n) < 100) {
-      newNumber = n.toFixed(2).toLocaleString();
-    } else if (Math.abs(n) >= 100) {
-      newNumber = Math.floor(n).toLocaleString();
-    } else if (Math.abs(n) < 1) {
-      newNumber = n.toFixed(4).toLocaleString();
-    }
-
-    return newNumber;
-  };
-
-  // 백만
-  const volumeFormatter = (n) => {
-    let tmp = (n / 1000000).toLocaleString(undefined, {
-      maximumFractionDigits: 0,
-    });
-
-    return `${tmp}백만`;
-  };
-
   return (
     <Center>
       {coinPriceArrReady && (
-        <ListContainer
-        // initial={{ opacity: 0.7, x: -10 }}
-        // animate={{ opacity: 1, x: 0 }}
-        // exit={{ opacity: 0, x: -10 }}
-        // transition={{
-        //   duration: 0.2,
-        // }}
-        >
+        <ListContainer>
           {coinPriceArr.map((coin, i) => (
             <Line key={i}>
               <LineContainer>
