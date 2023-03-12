@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 
-const Menu = ({ setMenuSelect }) => {
+const Menu = ({ setMenuSelect, menuSelect }) => {
   const [x, setX] = useState(21);
   const headerRef = useRef(null);
 
@@ -24,13 +24,29 @@ const Menu = ({ setMenuSelect }) => {
     };
   }, []);
 
+  useEffect(() => {
+    switch (menuSelect) {
+      case "chart":
+        setX(21);
+        break;
+      case "orderbook":
+        setX(70);
+        break;
+      case "trade":
+        setX(121);
+        break;
+      case "order":
+        setX(171);
+        break;
+    }
+  }, [menuSelect]);
+
   return (
     <MenuContainer ref={headerRef}>
       <MenuInner>
         <ul>
           <li
             onClick={() => {
-              setX(21);
               setMenuSelect("chart");
             }}
           >
@@ -38,7 +54,6 @@ const Menu = ({ setMenuSelect }) => {
           </li>
           <li
             onClick={() => {
-              setX(70);
               setMenuSelect("orderbook");
             }}
           >
@@ -46,7 +61,6 @@ const Menu = ({ setMenuSelect }) => {
           </li>
           <li
             onClick={() => {
-              setX(121);
               setMenuSelect("trade");
             }}
           >
@@ -54,7 +68,6 @@ const Menu = ({ setMenuSelect }) => {
           </li>
           <li
             onClick={() => {
-              setX(171);
               setMenuSelect("order");
             }}
           >

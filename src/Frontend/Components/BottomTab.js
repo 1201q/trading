@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { faCoins, faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect } from "react";
 import { Link } from "react-router-dom";
 
 const BottomTab = ({ tab, setTab }) => {

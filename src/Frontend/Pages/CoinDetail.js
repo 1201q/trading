@@ -10,7 +10,7 @@ import { useParams } from "react-router-dom";
 import styled from "styled-components";
 import Menu from "../Components/Menu";
 import Header from "../Components/Header";
-import OrderbookBar from "../Components/OrderbookBar";
+import OrderbookInfo from "../Components/OrderbookInfo";
 
 const Main = () => {
   let { param_coincode } = useParams();
@@ -224,19 +224,20 @@ const Main = () => {
         morePriceInfo={morePriceInfo}
         candle={candle}
       />
-      <Menu setMenuSelect={setMenuSelect} />
+      <Menu setMenuSelect={setMenuSelect} menuSelect={menuSelect} />
 
       {menuSelect === "chart" && (
         <BongChart candleData={candleData} price={price} volume={volume} />
       )}
 
       {menuSelect === "chart" && (
-        <OrderbookBar
+        <OrderbookInfo
           orderbookSumInfo={orderbookSumInfo}
           orderBookBarAnimationControl={orderBookBarAnimationControl}
+          setMenuSelect={setMenuSelect}
         />
       )}
-      {(menuSelect === "orderbook" || menuSelect === "chart") && (
+      {menuSelect === "orderbook" && (
         <Orderbook
           orderbook={orderbook}
           orderbookSumInfo={orderbookSumInfo}

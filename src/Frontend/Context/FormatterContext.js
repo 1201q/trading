@@ -1,7 +1,3 @@
-import { atom, selector, useRecoilState, useRecoilValue } from "recoil";
-import { useState, useEffect, useCallback, useRef } from "react";
-import axios from "axios";
-
 export const percentageFormatter = (n) => {
   if (n > 0) {
     return `+${n.toFixed(2)}%`;
@@ -36,5 +32,7 @@ export const volumeFormatter = (n) => {
 
 //체결창 가격
 export const formatter = (n) => {
-  return n.toLocaleString();
+  if (typeof n === "number") {
+    return n.toLocaleString();
+  }
 };

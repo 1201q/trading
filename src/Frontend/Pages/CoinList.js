@@ -15,6 +15,8 @@ import "react-loading-skeleton/dist/skeleton.css";
 const List = ({ setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
   const [coinPriceDataArr, setCoinPriceDataArr] = useState([]);
+
+  const [searchKeyword, setSearchKeyword] = useState("");
   const [coinListLoading, setCoinListLoading] = useState(true);
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
@@ -36,6 +38,12 @@ const List = ({ setTab, tab }) => {
       }
     };
   }, [coinList]);
+
+  // useEffect(() => {
+  //   if (!loading) {
+  //     filterCoinList();
+  //   }
+  // }, [searchKeyword]);
 
   async function getCoinList() {
     let arr = [];
@@ -74,6 +82,7 @@ const List = ({ setTab, tab }) => {
         updatedCoinList[coinIndex][5] = text.acc_trade_price_24h;
 
         updatedCoinList.sort((a, b) => b[5] - a[5]);
+
         setCoinPriceDataArr(updatedCoinList);
 
         setTimeout(() => {
@@ -85,8 +94,27 @@ const List = ({ setTab, tab }) => {
     }
   }
 
+  // function filterCoinList(keyword) {
+  //   let tmp = [...coinList];
+  //   console.log(coinList);
+  //   if (searchKeyword.length >= 1) {
+  //     setFilteredCoinList(tmp.filter((data) => data[1].includes(keyword)));
+  //     console.log("!");
+  //   } else {
+  //     setFilteredCoinList(coinPriceDataArr);
+  //     console.log(coinPriceDataArr);
+  //   }
+  // }
+
   return (
     <Center>
+      {/* <input
+        type="text"
+        value={searchKeyword}
+        onChange={(e) => {
+          setSearchKeyword(e.target.value);
+        }}
+      /> */}
       {!coinListLoading ? (
         <ListContainer>
           {coinPriceDataArr.map((coin, i) => (
