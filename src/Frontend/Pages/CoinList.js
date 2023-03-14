@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import axios from "axios";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useMemo } from "react";
 import styled from "styled-components";
 import BottomTab from "../Components/BottomTab";
 import { motion } from "framer-motion";
@@ -11,6 +11,7 @@ import {
 } from "../Context/FormatterContext";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
+import CoinListComponents from "../Components/CoinListComponent";
 
 const List = ({ setTab, tab }) => {
   const [coinList, setCoinList] = useState([]);
@@ -21,6 +22,10 @@ const List = ({ setTab, tab }) => {
 
   const wsURL = "wss://api.upbit.com/websocket/v1";
   const wsPrice = useRef(null);
+
+  const memoizedCoinPriceDataArr = useMemo(() => {
+    return coinPriceDataArr;
+  }, [coinPriceDataArr]);
 
   useEffect(() => {
     if (coinList.length === 0) {
@@ -38,12 +43,6 @@ const List = ({ setTab, tab }) => {
       }
     };
   }, [coinList]);
-
-  // useEffect(() => {
-  //   if (!loading) {
-  //     filterCoinList();
-  //   }
-  // }, [searchKeyword]);
 
   async function getCoinList() {
     let arr = [];
@@ -94,64 +93,12 @@ const List = ({ setTab, tab }) => {
     }
   }
 
-  // function filterCoinList(keyword) {
-  //   let tmp = [...coinList];
-  //   console.log(coinList);
-  //   if (searchKeyword.length >= 1) {
-  //     setFilteredCoinList(tmp.filter((data) => data[1].includes(keyword)));
-  //     console.log("!");
-  //   } else {
-  //     setFilteredCoinList(coinPriceDataArr);
-  //     console.log(coinPriceDataArr);
-  //   }
-  // }
-
   return (
     <Center>
-      {/* <input
-        type="text"
-        value={searchKeyword}
-        onChange={(e) => {
-          setSearchKeyword(e.target.value);
-        }}
-      /> */}
       {!coinListLoading ? (
         <ListContainer>
           {coinPriceDataArr.map((coin, i) => (
-            <Line key={i}>
-              <LineContainer>
-                <HeaderBox>
-                  <Link to={`/exchange/${coin[0]}`} key={coin[0]}>
-                    <CoinKRnameBtn>{coin[1]}</CoinKRnameBtn>
-                  </Link>
-                  <CoinEnname>{coin[0]}</CoinEnname>
-                </HeaderBox>
-                <Box
-                  fontColor={
-                    coin[3] > 0
-                      ? "#CD614D"
-                      : coin[3] < 0
-                      ? "#3c87e5"
-                      : "#424242"
-                  }
-                >
-                  <div>{numberFormatter(coin[2])}</div>
-                </Box>
-                <Box
-                  fontColor={
-                    coin[3] > 0
-                      ? "#CD614D"
-                      : coin[3] < 0
-                      ? "#3c87e5"
-                      : "#424242"
-                  }
-                >
-                  <div>{numberFormatter(coin[3])}</div>
-                  <div>{percentageFormatter(coin[4] * 100)}</div>
-                </Box>
-                <Box>{coin[5] && volumeFormatter(coin[5])}</Box>
-              </LineContainer>
-            </Line>
+            <CoinListComponents coin={coin} key={i} loading={coinListLoading} />
           ))}
         </ListContainer>
       ) : (
@@ -159,22 +106,7 @@ const List = ({ setTab, tab }) => {
           {Array(50)
             .fill(0)
             .map((data, i) => (
-              <Line key={i}>
-                <LoadingContainer>
-                  <LoadingBox Boxwidth={"25%"}>
-                    <Skeleton count={2} height={16} />
-                  </LoadingBox>
-                  <LoadingBox Boxwidth={"20%"}>
-                    <Skeleton count={1} height={20} />
-                  </LoadingBox>
-                  <LoadingBox Boxwidth={"20%"}>
-                    <Skeleton count={2} height={14} />
-                  </LoadingBox>
-                  <LoadingBox Boxwidth={"20%"}>
-                    <Skeleton count={1} height={30} />
-                  </LoadingBox>
-                </LoadingContainer>
-              </Line>
+              <CoinListComponents key={i} loading={coinListLoading} />
             ))}
         </ListContainer>
       )}
@@ -203,62 +135,6 @@ const ListContainer = styled(motion.div)`
   max-width: 450px;
   display: flex;
   flex-direction: column;
-`;
-
-const Line = styled.div`
-  width: 100%;
-  height: 54px;
-  /* box-shadow: 0 0 0 1px #eff1f2 inset; */
-  border-bottom: 1px solid #ebeff0;
-`;
-
-const LineContainer = styled.div`
-  display: flex;
-  padding: 10px 20px;
-`;
-
-const LoadingContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-`;
-
-const CoinKRnameBtn = styled.button`
-  border: none;
-  font-size: 14px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-weight: 600;
-  cursor: pointer;
-  background-color: white;
-  color: #424242;
-  padding: 0;
-`;
-
-const CoinEnname = styled.div`
-  font-size: 12px;
-  font-weight: 400;
-  color: #aaaaaa;
-`;
-
-const HeaderBox = styled.div`
-  width: 25%;
-`;
-
-const LoadingBox = styled.div`
-  width: ${(props) => props.Boxwidth};
-`;
-
-const Box = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-end;
-  width: 25%;
-  font-size: 14px;
-  font-weight: 600;
-  color: ${(props) => props.fontColor};
 `;
 
 export default List;
